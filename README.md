@@ -12,8 +12,10 @@ clone仓库
 ```bash
 $ git clone 仓库地址/Tron Script.git
 $ cd ./文件夹/Myconnection
-$ javac 
-
+$ javac myChannelManager.java
 ```
+在当前目录下创建一个名为`MANIFEST.MF`的文件
+
+内容如下
 ### 运行
 ## Module 2-MyDiscover

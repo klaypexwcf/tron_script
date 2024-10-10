@@ -41,7 +41,7 @@ public class  MyConfig {
     private static int toPort=18888;
     @Getter
 
-    private static String toIp="43.138.89.105";
+    private static String toIp="填入IP";
 
     @Getter
     private static int network=11111;
@@ -264,7 +264,7 @@ public class  MyConfig {
 
         // Set request method to GET
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("TRON-PRO-API-KEY", "df2e36a6-6aed-4458-aaa3-24dcc929e2fe");
+        connection.setRequestProperty("TRON-PRO-API-KEY", "使用你的api");
         // Get the input stream of the connection
         return new BufferedReader(new InputStreamReader(connection.getInputStream()));
     }
