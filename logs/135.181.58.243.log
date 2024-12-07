@@ -1,0 +1,25 @@
+2024-11-13 10:59:14 WARN  - Connect to peer /135.181.58.243:18888 fail, cause:Cannot assign requested address: bind: /135.181.58.243:18888
+2024-11-13 10:59:14 INFO  - channel /135.181.58.243:18888 closed 
+2024-11-13 10:59:14 INFO  - Channel /135.181.58.243:18888 closed normally.
+2024-11-13 11:02:54 INFO  - Send message to channel /135.181.58.243:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\317\213\024\023\271U\3609\005\305\352\261\231\212\3646\\\263\rG#K)\245\233\332\264\321\226t\377\a\325\027\301\033zk\275\177\324CO+7u\322\022v\005\021\'\24642\f>\v/\035\275\265D\362"
+}
+network_id: 11111
+timestamp: 1731466973989
+version: 1
+
+2024-11-13 11:02:54 INFO  - received HANDSHAKE_HELLO from /135.181.58.243:18888, [HelloMessage: from {
+  address: "135.181.58.243"
+  port: 18888
+  nodeId: "\027\277yb,y\247\223\335\353\265\355\344=\3330\004\021T\000\233\276I\276\2313\003r\261\206\362h\354\222\232Qpj\301\313\374o\3275\265\341\316\312\346&\312\374H\231+\016\023\313?m\033\260H\366"
+}
+network_id: 11111
+code: 1
+timestamp: 1731466973989
+version: 1
+
+2024-11-13 11:02:54 INFO  - Try to close channel: /135.181.58.243:18888, reason: TOO_MANY_PEERS
+2024-11-13 11:02:54 INFO  - channel /135.181.58.243:18888 closed 
+2024-11-13 11:02:54 INFO  - Channel /135.181.58.243:18888 closed normally.

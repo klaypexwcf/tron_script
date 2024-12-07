@@ -1,0 +1,131 @@
+2024-11-06 14:11:32 INFO  - MainClass: Starting task1 for 142.132.144.189
+2024-11-06 14:11:32 INFO  - MainClass: Starting task2 for 142.132.144.189
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:32 INFO  - Send message to channel /142.132.144.189:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873492662
+version: 1
+
+2024-11-06 14:11:33 INFO  - received HANDSHAKE_HELLO from /142.132.144.189:18888, [HelloMessage: from {
+  address: "142.132.144.189"
+  port: 18888
+  nodeId: "e,\3761\025\343*N\0254\360\005\223>\2502\252\300\204\034^\323/\277\020S\023#u<\375\273\337J\365\000bd\301e\347q\316\030\306\324s\212\372\345\255Ew\300\303\324k\270{\357\020=\266^"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873492662
+version: 1
+
+2024-11-06 14:11:33 INFO  - Try to close channel: /142.132.144.189:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:11:33 INFO  - channel /142.132.144.189:18888 closed 
+2024-11-06 14:11:33 INFO  - Channel /142.132.144.189:18888 closed normally.
+2024-11-06 14:11:34 WARN  - Connect to peer /142.132.144.189:18888 fail, cause:connection timed out: /142.132.144.189:18888
+2024-11-06 14:11:34 INFO  - channel /142.132.144.189:18888 closed 
+2024-11-06 14:11:34 INFO  - Channel /142.132.144.189:18888 closed normally.
+2024-11-06 14:12:33 INFO  - entering func connectAsync1
+2024-11-06 14:12:33 INFO  - entering func connectAsync2
+2024-11-06 14:12:33 INFO  - Close channel:/142.132.144.189:18888
+2024-11-06 14:12:34 INFO  - Send message to channel /142.132.144.189:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873553035
+version: 1
+
+2024-11-06 14:12:34 INFO  - received HANDSHAKE_HELLO from /142.132.144.189:18888, [HelloMessage: from {
+  address: "142.132.144.189"
+  port: 18888
+  nodeId: "e,\3761\025\343*N\0254\360\005\223>\2502\252\300\204\034^\323/\277\020S\023#u<\375\273\337J\365\000bd\301e\347q\316\030\306\324s\212\372\345\255Ew\300\303\324k\270{\357\020=\266^"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873553035
+version: 1
+
+2024-11-06 14:12:34 INFO  - Try to close channel: /142.132.144.189:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:12:34 INFO  - channel /142.132.144.189:18888 closed 
+2024-11-06 14:12:34 INFO  - Channel /142.132.144.189:18888 closed normally.
+2024-11-06 14:12:34 INFO  - entering func connectAsync1
+2024-11-06 14:12:34 INFO  - entering func connectAsync2
+2024-11-06 14:12:34 INFO  - Close channel:null
+2024-11-06 14:12:34 INFO  - Send message to channel /142.132.144.189:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873554742
+version: 1
+
+2024-11-06 14:12:35 INFO  - received HANDSHAKE_HELLO from /142.132.144.189:18888, [HelloMessage: from {
+  address: "142.132.144.189"
+  port: 18888
+  nodeId: "e,\3761\025\343*N\0254\360\005\223>\2502\252\300\204\034^\323/\277\020S\023#u<\375\273\337J\365\000bd\301e\347q\316\030\306\324s\212\372\345\255Ew\300\303\324k\270{\357\020=\266^"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873554742
+version: 1
+
+2024-11-06 14:12:35 INFO  - Try to close channel: /142.132.144.189:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:12:35 INFO  - channel /142.132.144.189:18888 closed 
+2024-11-06 14:12:35 INFO  - Channel /142.132.144.189:18888 closed normally.
+2024-11-06 14:13:34 INFO  - entering func connectAsync1
+2024-11-06 14:13:34 INFO  - entering func connectAsync2
+2024-11-06 14:13:34 INFO  - Close channel:/142.132.144.189:18888
+2024-11-06 14:13:35 INFO  - entering func connectAsync1
+2024-11-06 14:13:35 INFO  - entering func connectAsync2
+2024-11-06 14:13:35 INFO  - Close channel:/142.132.144.189:18888
+2024-11-06 14:13:35 INFO  - Send message to channel /142.132.144.189:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873615032
+version: 1
+
+2024-11-06 14:13:35 INFO  - received HANDSHAKE_HELLO from /142.132.144.189:18888, [HelloMessage: from {
+  address: "142.132.144.189"
+  port: 18888
+  nodeId: "e,\3761\025\343*N\0254\360\005\223>\2502\252\300\204\034^\323/\277\020S\023#u<\375\273\337J\365\000bd\301e\347q\316\030\306\324s\212\372\345\255Ew\300\303\324k\270{\357\020=\266^"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873615032
+version: 1
+
+2024-11-06 14:13:35 INFO  - Try to close channel: /142.132.144.189:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:13:35 INFO  - channel /142.132.144.189:18888 closed 
+2024-11-06 14:13:35 INFO  - Channel /142.132.144.189:18888 closed normally.
+2024-11-06 14:13:35 INFO  - Send message to channel /142.132.144.189:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873614328
+version: 1
+
+2024-11-06 14:13:35 INFO  - received HANDSHAKE_HELLO from /142.132.144.189:18888, [HelloMessage: from {
+  address: "142.132.144.189"
+  port: 18888
+  nodeId: "e,\3761\025\343*N\0254\360\005\223>\2502\252\300\204\034^\323/\277\020S\023#u<\375\273\337J\365\000bd\301e\347q\316\030\306\324s\212\372\345\255Ew\300\303\324k\270{\357\020=\266^"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873614328
+version: 1
+
+2024-11-06 14:13:35 INFO  - Try to close channel: /142.132.144.189:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:13:35 INFO  - channel /142.132.144.189:18888 closed 
+2024-11-06 14:13:35 INFO  - Channel /142.132.144.189:18888 closed normally.

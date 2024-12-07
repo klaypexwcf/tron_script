@@ -1,0 +1,74 @@
+2024-11-06 14:11:32 INFO  - MainClass: Starting task2 for 142.132.248.229
+2024-11-06 14:11:32 INFO  - MainClass: Starting task1 for 142.132.248.229
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:34 WARN  - Connect to peer /142.132.248.229:18888 fail, cause:connection timed out: /142.132.248.229:18888
+2024-11-06 14:11:34 WARN  - Connect to peer /142.132.248.229:18888 fail, cause:connection timed out: /142.132.248.229:18888
+2024-11-06 14:11:34 INFO  - channel /142.132.248.229:18888 closed 
+2024-11-06 14:11:34 INFO  - Channel /142.132.248.229:18888 closed normally.
+2024-11-06 14:11:34 INFO  - channel /142.132.248.229:18888 closed 
+2024-11-06 14:11:34 INFO  - Channel /142.132.248.229:18888 closed normally.
+2024-11-06 14:12:34 INFO  - entering func connectAsync1
+2024-11-06 14:12:34 INFO  - entering func connectAsync2
+2024-11-06 14:12:34 INFO  - entering func connectAsync1
+2024-11-06 14:12:34 INFO  - entering func connectAsync2
+2024-11-06 14:12:34 INFO  - Close channel:null
+2024-11-06 14:12:34 INFO  - Close channel:null
+2024-11-06 14:12:34 INFO  - Send message to channel /142.132.248.229:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873554712
+version: 1
+
+2024-11-06 14:12:35 INFO  - received HANDSHAKE_HELLO from /142.132.248.229:18888, [HelloMessage: from {
+  address: "142.132.248.229"
+  port: 18888
+  nodeId: "\320\354\000\351\226\267\226\352\246\265e\342Z\211\030}\r~_\315\357F\362;\372\201\242\t\254fS\357\357\320X\305(\r\332\376\005D\r\240\350\301#\360\364\334\202\033\034\214\342\2547\355\374/c\3530P"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873554712
+version: 1
+
+2024-11-06 14:12:35 INFO  - Try to close channel: /142.132.248.229:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:12:35 INFO  - channel /142.132.248.229:18888 closed 
+2024-11-06 14:12:35 INFO  - Channel /142.132.248.229:18888 closed normally.
+2024-11-06 14:12:36 WARN  - Connect to peer /142.132.248.229:18888 fail, cause:connection timed out: /142.132.248.229:18888
+2024-11-06 14:12:36 INFO  - channel /142.132.248.229:18888 closed 
+2024-11-06 14:12:36 INFO  - Channel /142.132.248.229:18888 closed normally.
+2024-11-06 14:13:35 INFO  - entering func connectAsync1
+2024-11-06 14:13:35 INFO  - entering func connectAsync2
+2024-11-06 14:13:35 INFO  - Close channel:/142.132.248.229:18888
+2024-11-06 14:13:35 INFO  - Send message to channel /142.132.248.229:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873615032
+version: 1
+
+2024-11-06 14:13:35 INFO  - received HANDSHAKE_HELLO from /142.132.248.229:18888, [HelloMessage: from {
+  address: "142.132.248.229"
+  port: 18888
+  nodeId: "\320\354\000\351\226\267\226\352\246\265e\342Z\211\030}\r~_\315\357F\362;\372\201\242\t\254fS\357\357\320X\305(\r\332\376\005D\r\240\350\301#\360\364\334\202\033\034\214\342\2547\355\374/c\3530P"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873615032
+version: 1
+
+2024-11-06 14:13:35 INFO  - Try to close channel: /142.132.248.229:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:13:35 INFO  - channel /142.132.248.229:18888 closed 
+2024-11-06 14:13:35 INFO  - Channel /142.132.248.229:18888 closed normally.
+2024-11-06 14:13:36 INFO  - entering func connectAsync1
+2024-11-06 14:13:36 INFO  - entering func connectAsync2
+2024-11-06 14:13:36 INFO  - Close channel:null
+2024-11-06 14:13:38 WARN  - Connect to peer /142.132.248.229:18888 fail, cause:connection timed out: /142.132.248.229:18888
+2024-11-06 14:13:38 INFO  - channel /142.132.248.229:18888 closed 
+2024-11-06 14:13:38 INFO  - Channel /142.132.248.229:18888 closed normally.

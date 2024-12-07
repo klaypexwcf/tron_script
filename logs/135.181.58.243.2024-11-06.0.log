@@ -1,0 +1,74 @@
+2024-11-06 14:11:32 INFO  - MainClass: Starting task1 for 135.181.58.243
+2024-11-06 14:11:32 INFO  - MainClass: Starting task2 for 135.181.58.243
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:34 WARN  - Connect to peer /135.181.58.243:18888 fail, cause:connection timed out: /135.181.58.243:18888
+2024-11-06 14:11:34 WARN  - Connect to peer /135.181.58.243:18888 fail, cause:connection timed out: /135.181.58.243:18888
+2024-11-06 14:11:34 INFO  - channel /135.181.58.243:18888 closed 
+2024-11-06 14:11:34 INFO  - channel /135.181.58.243:18888 closed 
+2024-11-06 14:11:34 INFO  - Channel /135.181.58.243:18888 closed normally.
+2024-11-06 14:11:34 INFO  - Channel /135.181.58.243:18888 closed normally.
+2024-11-06 14:12:34 INFO  - entering func connectAsync1
+2024-11-06 14:12:34 INFO  - entering func connectAsync1
+2024-11-06 14:12:34 INFO  - entering func connectAsync2
+2024-11-06 14:12:34 INFO  - entering func connectAsync2
+2024-11-06 14:12:34 INFO  - Close channel:null
+2024-11-06 14:12:34 INFO  - Close channel:null
+2024-11-06 14:12:36 WARN  - Connect to peer /135.181.58.243:18888 fail, cause:connection timed out: /135.181.58.243:18888
+2024-11-06 14:12:36 INFO  - channel /135.181.58.243:18888 closed 
+2024-11-06 14:12:36 INFO  - Channel /135.181.58.243:18888 closed normally.
+2024-11-06 14:12:36 WARN  - Connect to peer /135.181.58.243:18888 fail, cause:connection timed out: /135.181.58.243:18888
+2024-11-06 14:12:36 INFO  - channel /135.181.58.243:18888 closed 
+2024-11-06 14:12:36 INFO  - Channel /135.181.58.243:18888 closed normally.
+2024-11-06 14:13:36 INFO  - entering func connectAsync1
+2024-11-06 14:13:36 INFO  - entering func connectAsync2
+2024-11-06 14:13:36 INFO  - Close channel:null
+2024-11-06 14:13:36 INFO  - entering func connectAsync1
+2024-11-06 14:13:36 INFO  - entering func connectAsync2
+2024-11-06 14:13:36 INFO  - Close channel:null
+2024-11-06 14:13:36 INFO  - Send message to channel /135.181.58.243:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873616737
+version: 1
+
+2024-11-06 14:13:36 INFO  - Send message to channel /135.181.58.243:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873616753
+version: 1
+
+2024-11-06 14:13:37 INFO  - received HANDSHAKE_HELLO from /135.181.58.243:18888, [HelloMessage: from {
+  address: "135.181.58.243"
+  port: 18888
+  nodeId: "\027\277yb,y\247\223\335\353\265\355\344=\3330\004\021T\000\233\276I\276\2313\003r\261\206\362h\354\222\232Qpj\301\313\374o\3275\265\341\316\312\346&\312\374H\231+\016\023\313?m\033\260H\366"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873616737
+version: 1
+
+2024-11-06 14:13:37 INFO  - Try to close channel: /135.181.58.243:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:13:37 INFO  - channel /135.181.58.243:18888 closed 
+2024-11-06 14:13:37 INFO  - Channel /135.181.58.243:18888 closed normally.
+2024-11-06 14:13:37 INFO  - received HANDSHAKE_HELLO from /135.181.58.243:18888, [HelloMessage: from {
+  address: "135.181.58.243"
+  port: 18888
+  nodeId: "\027\277yb,y\247\223\335\353\265\355\344=\3330\004\021T\000\233\276I\276\2313\003r\261\206\362h\354\222\232Qpj\301\313\374o\3275\265\341\316\312\346&\312\374H\231+\016\023\313?m\033\260H\366"
+}
+network_id: 11111
+code: 3
+timestamp: 1730873616753
+version: 1
+
+2024-11-06 14:13:37 INFO  - Try to close channel: /135.181.58.243:18888, reason: RECENT_DISCONNECT
+2024-11-06 14:13:37 INFO  - channel /135.181.58.243:18888 closed 
+2024-11-06 14:13:37 INFO  - Channel /135.181.58.243:18888 closed normally.

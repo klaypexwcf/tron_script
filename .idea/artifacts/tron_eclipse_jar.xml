@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="tron_eclipse:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/tron_eclipse_jar</output-path>
+    <root id="archive" name="tron_eclipse.jar">
+      <element id="module-output" name="tron_eclipse" />
+      <element id="extracted-dir" path="F:/download/libp2p-2.2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="F:/download/netty-transport-4.1.79.Final.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.21.12/5589e79a33cb6509f7e681d7cf4fc59d47c51c71/protobuf-java-3.21.12.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.bouncycastle/bcprov-jdk15on/1.69/91e1628251cf3ca90093ce9d0fe67e5b7dab3850/bcprov-jdk15on-1.69.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="F:/download/netty-common-4.1.79.Final.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java-util/3.21.12/1a800bf7976d939217c8d91ed9a17d7a78bf2187/protobuf-java-util-3.21.12.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.2.9/cdaca0cf922c5791a8efa0063ec714ca974affe3/logback-core-1.2.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="F:/download/commons-lang3-3.16.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.79.Final/18f5b02af7ca611978bc28f2cb58cbb3b9b0f0ef/netty-codec-4.1.79.Final.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.79.Final/55ecb1ff4464b56564a90824a741c3911264aaa4/netty-resolver-4.1.79.Final.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler/4.1.79.Final/2dc22423c8ed19906615fb936a5fcb7db14a4e6c/netty-handler-4.1.79.Final.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.2.9/7d495522b08a9a66084bf417e70eedf95ef706bc/logback-classic-1.2.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/protocol-core/2.18.41/20b4c439116ad7818b6594a3d1719c2366b1b06f/protocol-core-2.18.41.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.79.Final/731937caec938b77b39df932a8da8aaca8d5ec05/netty-transport-native-unix-common-4.1.79.Final.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/31.1-android/9222c47cc3ae890f07f7c961bbb3cb69050fe4aa/guava-31.1-android.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.79.Final/6c014412b599489b1db27c6bc08d8a46da94e397/netty-buffer-4.1.79.Final.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,93 @@
+2024-11-06 14:11:32 INFO  - MainClass: Starting task1 for 35.189.1.174
+2024-11-06 14:11:32 INFO  - MainClass: Starting task2 for 35.189.1.174
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:32 INFO  - Send message to channel /35.189.1.174:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873492662
+version: 1
+
+2024-11-06 14:11:33 INFO  - received HANDSHAKE_HELLO from /35.189.1.174:18888, [HelloMessage: from {
+  address: "35.189.1.174"
+  port: 18888
+  nodeId: "\337\223\332|\354\262\273\374\375\334\272TN\307\260\237\305\234\240\265\302\250\201si\213\036\2439Mm\360Z\231E\331\346\247\016)\\\315\223\214\022\246\247`\225\377Un_+\317\223\tD(\325\274\023\224\266"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873492662
+version: 1
+
+2024-11-06 14:11:33 INFO  - Try to close channel: /35.189.1.174:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:11:33 INFO  - channel /35.189.1.174:18888 closed 
+2024-11-06 14:11:33 INFO  - Channel /35.189.1.174:18888 closed normally.
+2024-11-06 14:11:34 WARN  - Connect to peer /35.189.1.174:18888 fail, cause:connection timed out: /35.189.1.174:18888
+2024-11-06 14:11:34 INFO  - channel /35.189.1.174:18888 closed 
+2024-11-06 14:11:34 INFO  - Channel /35.189.1.174:18888 closed normally.
+2024-11-06 14:12:33 INFO  - entering func connectAsync1
+2024-11-06 14:12:33 INFO  - entering func connectAsync2
+2024-11-06 14:12:33 INFO  - Close channel:/35.189.1.174:18888
+2024-11-06 14:12:34 INFO  - entering func connectAsync1
+2024-11-06 14:12:34 INFO  - entering func connectAsync2
+2024-11-06 14:12:34 INFO  - Close channel:null
+2024-11-06 14:12:35 INFO  - Send message to channel /35.189.1.174:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873554708
+version: 1
+
+2024-11-06 14:12:35 WARN  - Connect to peer /35.189.1.174:18888 fail, cause:connection timed out: /35.189.1.174:18888
+2024-11-06 14:12:35 INFO  - channel /35.189.1.174:18888 closed 
+2024-11-06 14:12:35 INFO  - Channel /35.189.1.174:18888 closed normally.
+2024-11-06 14:12:35 INFO  - received HANDSHAKE_HELLO from /35.189.1.174:18888, [HelloMessage: from {
+  address: "35.189.1.174"
+  port: 18888
+  nodeId: "\337\223\332|\354\262\273\374\375\334\272TN\307\260\237\305\234\240\265\302\250\201si\213\036\2439Mm\360Z\231E\331\346\247\016)\\\315\223\214\022\246\247`\225\377Un_+\317\223\tD(\325\274\023\224\266"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873554708
+version: 1
+
+2024-11-06 14:12:35 INFO  - Try to close channel: /35.189.1.174:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:12:35 INFO  - channel /35.189.1.174:18888 closed 
+2024-11-06 14:12:35 INFO  - Channel /35.189.1.174:18888 closed normally.
+2024-11-06 14:13:35 INFO  - entering func connectAsync1
+2024-11-06 14:13:35 INFO  - entering func connectAsync1
+2024-11-06 14:13:35 INFO  - entering func connectAsync2
+2024-11-06 14:13:35 INFO  - entering func connectAsync2
+2024-11-06 14:13:35 INFO  - Close channel:/35.189.1.174:18888
+2024-11-06 14:13:35 INFO  - Close channel:null
+2024-11-06 14:13:36 INFO  - Send message to channel /35.189.1.174:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873615302
+version: 1
+
+2024-11-06 14:13:36 INFO  - received HANDSHAKE_HELLO from /35.189.1.174:18888, [HelloMessage: from {
+  address: "35.189.1.174"
+  port: 18888
+  nodeId: "\337\223\332|\354\262\273\374\375\334\272TN\307\260\237\305\234\240\265\302\250\201si\213\036\2439Mm\360Z\231E\331\346\247\016)\\\315\223\214\022\246\247`\225\377Un_+\317\223\tD(\325\274\023\224\266"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873615302
+version: 1
+
+2024-11-06 14:13:36 INFO  - Try to close channel: /35.189.1.174:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:13:36 INFO  - channel /35.189.1.174:18888 closed 
+2024-11-06 14:13:36 INFO  - Channel /35.189.1.174:18888 closed normally.
+2024-11-06 14:13:37 WARN  - Connect to peer /35.189.1.174:18888 fail, cause:connection timed out: /35.189.1.174:18888
+2024-11-06 14:13:37 INFO  - channel /35.189.1.174:18888 closed 
+2024-11-06 14:13:37 INFO  - Channel /35.189.1.174:18888 closed normally.

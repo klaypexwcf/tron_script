@@ -1,0 +1,195 @@
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\317\213\024\023\271U\3609\005\305\352\261\231\212\3646\\\263\rG#K)\245\233\332\264\321\226t\377\a\325\027\301\033zk\275\177\324CO+7u\322\022v\005\021\'\24642\f>\v/\035\275\265D\362"
+}
+network_id: 11111
+timestamp: 1731467718511
+version: 1
+
+2024-11-13 11:15:19 INFO  - received HANDSHAKE_HELLO from /44.199.101.95:18888, [HelloMessage: from {
+  address: "44.199.101.95"
+  port: 18888
+  nodeId: "4\235\322\242\323\026/\375\247\352\340hW\371\260d\330\352#YAWT\346\373X\235\02138cG\rD\324\303\357q\250\\ab\240\200\022S\306\302\226\356\3767\273\213)\017\366\320\016z\254\216\335\207"
+}
+network_id: 11111
+code: 1
+timestamp: 1731467718511
+version: 1
+
+2024-11-13 11:15:19 INFO  - Try to close channel: /44.199.101.95:18888, reason: TOO_MANY_PEERS
+2024-11-13 11:15:19 INFO  - channel /44.199.101.95:18888 closed 
+2024-11-13 11:15:19 INFO  - Channel /44.199.101.95:18888 closed normally.
+2024-11-13 11:36:51 INFO  - entering func connectAsync1
+2024-11-13 11:36:52 INFO  - entering func connectAsync2
+2024-11-13 11:36:52 INFO  - Send message to channel /44.199.101.95:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\317\213\024\023\271U\3609\005\305\352\261\231\212\3646\\\263\rG#K)\245\233\332\264\321\226t\377\a\325\027\301\033zk\275\177\324CO+7u\322\022v\005\021\'\24642\f>\v/\035\275\265D\362"
+}
+network_id: 11111
+timestamp: 1731469012448
+version: 1
+
+2024-11-13 11:36:53 INFO  - received HANDSHAKE_HELLO from /44.199.101.95:18888, [HelloMessage: from {
+  address: "44.199.101.95"
+  port: 18888
+  nodeId: "4\235\322\242\323\026/\375\247\352\340hW\371\260d\330\352#YAWT\346\373X\235\02138cG\rD\324\303\357q\250\\ab\240\200\022S\306\302\226\356\3767\273\213)\017\366\320\016z\254\216\335\207"
+}
+network_id: 11111
+code: 1
+timestamp: 1731469012448
+version: 1
+
+2024-11-13 11:36:53 INFO  - Try to close channel: /44.199.101.95:18888, reason: TOO_MANY_PEERS
+2024-11-13 11:36:53 INFO  - channel /44.199.101.95:18888 closed 
+2024-11-13 11:36:53 INFO  - Channel /44.199.101.95:18888 closed normally.
+2024-11-13 11:39:28 INFO  - entering func connectAsync1
+2024-11-13 11:39:28 INFO  - entering func connectAsync2
+2024-11-13 11:39:29 INFO  - Send message to channel /44.199.101.95:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\317\213\024\023\271U\3609\005\305\352\261\231\212\3646\\\263\rG#K)\245\233\332\264\321\226t\377\a\325\027\301\033zk\275\177\324CO+7u\322\022v\005\021\'\24642\f>\v/\035\275\265D\362"
+}
+network_id: 11111
+timestamp: 1731469169043
+version: 1
+
+2024-11-13 11:39:29 INFO  - received HANDSHAKE_HELLO from /44.199.101.95:18888, [HelloMessage: from {
+  address: "44.199.101.95"
+  port: 18888
+  nodeId: "4\235\322\242\323\026/\375\247\352\340hW\371\260d\330\352#YAWT\346\373X\235\02138cG\rD\324\303\357q\250\\ab\240\200\022S\306\302\226\356\3767\273\213)\017\366\320\016z\254\216\335\207"
+}
+network_id: 11111
+code: 1
+timestamp: 1731469169043
+version: 1
+
+2024-11-13 11:39:29 INFO  - Try to close channel: /44.199.101.95:18888, reason: TOO_MANY_PEERS
+2024-11-13 11:39:29 INFO  - channel /44.199.101.95:18888 closed 
+2024-11-13 11:39:29 INFO  - Channel /44.199.101.95:18888 closed normally.
+2024-11-13 11:42:46 INFO  - entering func connectAsync1
+2024-11-13 11:42:47 INFO  - entering func connectAsync2
+2024-11-13 11:42:49 WARN  - Connect to peer /44.199.101.95:18888 fail, cause:connection timed out: /44.199.101.95:18888
+2024-11-13 11:42:49 INFO  - channel /44.199.101.95:18888 closed 
+2024-11-13 11:42:49 INFO  - Channel /44.199.101.95:18888 closed normally.
+2024-11-13 11:43:35 INFO  - entering func connectAsync1
+2024-11-13 11:43:35 INFO  - entering func connectAsync2
+2024-11-13 11:43:36 INFO  - Send message to channel /44.199.101.95:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\317\213\024\023\271U\3609\005\305\352\261\231\212\3646\\\263\rG#K)\245\233\332\264\321\226t\377\a\325\027\301\033zk\275\177\324CO+7u\322\022v\005\021\'\24642\f>\v/\035\275\265D\362"
+}
+network_id: 11111
+timestamp: 1731469416209
+version: 1
+
+2024-11-13 11:43:36 INFO  - received HANDSHAKE_HELLO from /44.199.101.95:18888, [HelloMessage: from {
+  address: "44.199.101.95"
+  port: 18888
+  nodeId: "4\235\322\242\323\026/\375\247\352\340hW\371\260d\330\352#YAWT\346\373X\235\02138cG\rD\324\303\357q\250\\ab\240\200\022S\306\302\226\356\3767\273\213)\017\366\320\016z\254\216\335\207"
+}
+network_id: 11111
+code: 1
+timestamp: 1731469416209
+version: 1
+
+2024-11-13 11:43:36 INFO  - Try to close channel: /44.199.101.95:18888, reason: TOO_MANY_PEERS
+2024-11-13 11:43:36 INFO  - channel /44.199.101.95:18888 closed 
+2024-11-13 11:43:36 INFO  - Channel /44.199.101.95:18888 closed normally.
+2024-11-13 11:44:36 INFO  - entering func connectAsync1
+2024-11-13 11:44:36 INFO  - entering func connectAsync2
+2024-11-13 11:44:36 INFO  - Close channel:/44.199.101.95:18888
+2024-11-13 11:44:37 INFO  - Send message to channel /44.199.101.95:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\317\213\024\023\271U\3609\005\305\352\261\231\212\3646\\\263\rG#K)\245\233\332\264\321\226t\377\a\325\027\301\033zk\275\177\324CO+7u\322\022v\005\021\'\24642\f>\v/\035\275\265D\362"
+}
+network_id: 11111
+timestamp: 1731469476825
+version: 1
+
+2024-11-13 11:44:37 INFO  - received HANDSHAKE_HELLO from /44.199.101.95:18888, [HelloMessage: from {
+  address: "44.199.101.95"
+  port: 18888
+  nodeId: "4\235\322\242\323\026/\375\247\352\340hW\371\260d\330\352#YAWT\346\373X\235\02138cG\rD\324\303\357q\250\\ab\240\200\022S\306\302\226\356\3767\273\213)\017\366\320\016z\254\216\335\207"
+}
+network_id: 11111
+code: 1
+timestamp: 1731469476825
+version: 1
+
+2024-11-13 11:44:37 INFO  - Try to close channel: /44.199.101.95:18888, reason: TOO_MANY_PEERS
+2024-11-13 11:44:37 INFO  - channel /44.199.101.95:18888 closed 
+2024-11-13 11:44:37 INFO  - Channel /44.199.101.95:18888 closed normally.
+2024-11-13 11:45:41 INFO  - entering func connectAsync1
+2024-11-13 11:45:41 INFO  - entering func connectAsync2
+2024-11-13 11:45:41 INFO  - Send message to channel /44.199.101.95:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\317\213\024\023\271U\3609\005\305\352\261\231\212\3646\\\263\rG#K)\245\233\332\264\321\226t\377\a\325\027\301\033zk\275\177\324CO+7u\322\022v\005\021\'\24642\f>\v/\035\275\265D\362"
+}
+network_id: 11111
+timestamp: 1731469541656
+version: 1
+
+2024-11-13 11:45:42 INFO  - received HANDSHAKE_HELLO from /44.199.101.95:18888, [HelloMessage: from {
+  address: "44.199.101.95"
+  port: 18888
+  nodeId: "4\235\322\242\323\026/\375\247\352\340hW\371\260d\330\352#YAWT\346\373X\235\02138cG\rD\324\303\357q\250\\ab\240\200\022S\306\302\226\356\3767\273\213)\017\366\320\016z\254\216\335\207"
+}
+network_id: 11111
+code: 1
+timestamp: 1731469541656
+version: 1
+
+2024-11-13 11:45:42 INFO  - Try to close channel: /44.199.101.95:18888, reason: TOO_MANY_PEERS
+2024-11-13 11:45:42 INFO  - channel /44.199.101.95:18888 closed 
+2024-11-13 11:45:42 INFO  - Channel /44.199.101.95:18888 closed normally.
+2024-11-13 11:47:15 INFO  - entering func connectAsync1
+2024-11-13 11:47:16 INFO  - entering func connectAsync2
+2024-11-13 11:47:16 INFO  - Send message to channel /44.199.101.95:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\317\213\024\023\271U\3609\005\305\352\261\231\212\3646\\\263\rG#K)\245\233\332\264\321\226t\377\a\325\027\301\033zk\275\177\324CO+7u\322\022v\005\021\'\24642\f>\v/\035\275\265D\362"
+}
+network_id: 11111
+timestamp: 1731469636319
+version: 1
+
+2024-11-13 11:47:16 INFO  - received HANDSHAKE_HELLO from /44.199.101.95:18888, [HelloMessage: from {
+  address: "44.199.101.95"
+  port: 18888
+  nodeId: "4\235\322\242\323\026/\375\247\352\340hW\371\260d\330\352#YAWT\346\373X\235\02138cG\rD\324\303\357q\250\\ab\240\200\022S\306\302\226\356\3767\273\213)\017\366\320\016z\254\216\335\207"
+}
+network_id: 11111
+code: 1
+timestamp: 1731469636319
+version: 1
+
+2024-11-13 11:47:16 INFO  - Try to close channel: /44.199.101.95:18888, reason: TOO_MANY_PEERS
+2024-11-13 11:47:16 INFO  - channel /44.199.101.95:18888 closed 
+2024-11-13 11:47:16 INFO  - Channel /44.199.101.95:18888 closed normally.
+2024-11-13 11:47:26 INFO  - entering func connectAsync1
+2024-11-13 11:47:26 INFO  - entering func connectAsync2
+2024-11-13 11:47:27 INFO  - Send message to channel /44.199.101.95:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\317\213\024\023\271U\3609\005\305\352\261\231\212\3646\\\263\rG#K)\245\233\332\264\321\226t\377\a\325\027\301\033zk\275\177\324CO+7u\322\022v\005\021\'\24642\f>\v/\035\275\265D\362"
+}
+network_id: 11111
+timestamp: 1731469647002
+version: 1
+
+2024-11-13 11:47:27 INFO  - received HANDSHAKE_HELLO from /44.199.101.95:18888, [HelloMessage: from {
+  address: "44.199.101.95"
+  port: 18888
+  nodeId: "4\235\322\242\323\026/\375\247\352\340hW\371\260d\330\352#YAWT\346\373X\235\02138cG\rD\324\303\357q\250\\ab\240\200\022S\306\302\226\356\3767\273\213)\017\366\320\016z\254\216\335\207"
+}
+network_id: 11111
+code: 3
+timestamp: 1731469647002
+version: 1
+
+2024-11-13 11:47:27 INFO  - Try to close channel: /44.199.101.95:18888, reason: RECENT_DISCONNECT
+2024-11-13 11:47:27 INFO  - channel /44.199.101.95:18888 closed 
+2024-11-13 11:47:27 INFO  - Channel /44.199.101.95:18888 closed normally.

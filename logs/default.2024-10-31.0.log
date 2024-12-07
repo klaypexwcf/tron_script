@@ -1,0 +1,3 @@
+2024-10-31 16:33:17 INFO  - Starting....
+2024-10-31 16:33:38 WARN  - Fail to get ipv4 by http://checkip.amazonaws.com, cause:Connection timed out: connect
+2024-10-31 16:33:38 WARN  - Fail to get ipv4 by https://ifconfig.me/, cause:Connection timed out: connect

@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Main-Class: test.simpleConnector
+Class-Path: common-1.0.0.jar netty-transport-4.1.79.Final.jar netty-hand
+ ler-4.1.79.Final.jar spring-core-5.3.18.jar netty-buffer-4.1.79.Final.j
+ ar protocol-core-2.18.41.jar protobuf-java-3.21.12.jar snappy-java-1.1.
+ 10.5.jar chainbase-1.0.0.jar commons-lang3-3.16.0.jar logback-core-1.2.
+ 9.jar netty-resolver-4.1.79.Final.jar netty-common-4.1.79.Final.jar gua
+ va-31.1-android.jar bcprov-jdk15on-1.69.jar libp2p-2.2.1.jar netty-code
+ c-4.1.79.Final.jar slf4j-api-1.7.36.jar lombok-1.18.24.jar logback-clas
+ sic-1.2.9.jar protocol-1.0.0.jar json-20231013.jar
+

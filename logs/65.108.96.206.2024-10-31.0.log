@@ -1,0 +1,76 @@
+2024-10-31 15:35:31 INFO  - MainClass: Starting task for 65.108.96.206
+2024-10-31 15:35:31 INFO  - entering func connectAsync1
+2024-10-31 15:35:31 INFO  - entering func connectAsync2
+2024-10-31 15:47:25 INFO  - MainClass: Starting task for 65.108.96.206
+2024-10-31 15:47:25 INFO  - entering func connectAsync1
+2024-10-31 15:47:25 INFO  - entering func connectAsync2
+2024-10-31 16:07:46 INFO  - MainClass: Starting task for 65.108.96.206
+2024-10-31 16:07:46 INFO  - entering func connectAsync1
+2024-10-31 16:07:46 INFO  - entering func connectAsync2
+2024-10-31 16:11:22 INFO  - MainClass: Starting task for 65.108.96.206
+2024-10-31 16:11:22 INFO  - entering func connectAsync1
+2024-10-31 16:11:22 INFO  - entering func connectAsync2
+2024-10-31 16:11:26 INFO  - MainClass: Starting task for 65.108.96.206
+2024-10-31 16:11:26 INFO  - entering func connectAsync1
+2024-10-31 16:11:26 INFO  - entering func connectAsync2
+2024-10-31 16:15:45 INFO  - MainClass: Starting task for 65.108.96.206
+2024-10-31 16:15:45 INFO  - entering func connectAsync1
+2024-10-31 16:15:45 INFO  - entering func connectAsync2
+2024-10-31 16:16:06 INFO  - MainClass: Starting task for 65.108.96.206
+2024-10-31 16:16:06 INFO  - entering func connectAsync1
+2024-10-31 16:16:06 INFO  - entering func connectAsync2
+2024-10-31 16:17:08 INFO  - Close channel:null
+2024-10-31 16:22:00 INFO  - MainClass: Starting task for 65.108.96.206
+2024-10-31 16:22:00 INFO  - entering func connectAsync1
+2024-10-31 16:22:01 INFO  - entering func connectAsync2
+2024-10-31 16:23:03 INFO  - Close channel:null
+2024-10-31 16:31:26 INFO  - MainClass: Starting task for 65.108.96.206
+2024-10-31 16:31:26 INFO  - entering func connectAsync1
+2024-10-31 16:31:26 INFO  - entering func connectAsync2
+2024-10-31 16:31:29 WARN  - Connect to peer /65.108.96.206:18888 fail, cause:connection timed out: /65.108.96.206:18888
+2024-10-31 16:31:29 INFO  - channel /65.108.96.206:18888 closed 
+2024-10-31 16:31:29 INFO  - Channel /65.108.96.206:18888 closed normally.
+2024-10-31 16:32:29 INFO  - entering func connectAsync1
+2024-10-31 16:32:29 INFO  - entering func connectAsync2
+2024-10-31 16:32:29 INFO  - Close channel:null
+2024-10-31 16:32:31 WARN  - Connect to peer /65.108.96.206:18888 fail, cause:connection timed out: /65.108.96.206:18888
+2024-10-31 16:32:31 INFO  - channel /65.108.96.206:18888 closed 
+2024-10-31 16:32:31 INFO  - Channel /65.108.96.206:18888 closed normally.
+2024-10-31 16:33:17 INFO  - MainClass: Starting task for 65.108.96.206
+2024-10-31 16:33:17 INFO  - entering func connectAsync1
+2024-10-31 16:33:18 INFO  - entering func connectAsync2
+2024-10-31 16:33:18 INFO  - Send message to channel /65.108.96.206:18888, [HelloMessage: from {
+  address: "106.39.130.87"
+  port: 18899
+  nodeId: "\220>\035\2349\330&tuLf\335\267C\231\2655\2458m\027_\t|g\250\235\322\"\235\343f\353\357\030Ap\265EYI\252\225-\036\276\302x\352\351\326\323A\247pa\255\300f ,\223\017\b"
+}
+network_id: 11111
+timestamp: 1730363598325
+version: 1
+
+2024-10-31 16:33:18 INFO  - received HANDSHAKE_HELLO from /65.108.96.206:18888
+2024-10-31 16:33:18 INFO  - Try to close channel: /65.108.96.206:18888, reason: TOO_MANY_PEERS
+2024-10-31 16:33:18 INFO  - channel /65.108.96.206:18888 closed 
+2024-10-31 16:33:18 INFO  - Channel /65.108.96.206:18888 closed normally.
+2024-10-31 16:34:18 INFO  - entering func connectAsync1
+2024-10-31 16:34:18 INFO  - entering func connectAsync2
+2024-10-31 16:34:18 INFO  - Close channel:/65.108.96.206:18888
+2024-10-31 16:34:20 WARN  - Connect to peer /65.108.96.206:18888 fail, cause:connection timed out: /65.108.96.206:18888
+2024-10-31 16:34:20 INFO  - channel /65.108.96.206:18888 closed 
+2024-10-31 16:34:20 INFO  - Channel /65.108.96.206:18888 closed normally.
+2024-10-31 16:35:20 INFO  - entering func connectAsync1
+2024-10-31 16:35:20 INFO  - entering func connectAsync2
+2024-10-31 16:35:20 INFO  - Close channel:null
+2024-10-31 16:35:21 INFO  - Send message to channel /65.108.96.206:18888, [HelloMessage: from {
+  address: "106.39.130.87"
+  port: 18899
+  nodeId: "\220>\035\2349\330&tuLf\335\267C\231\2655\2458m\027_\t|g\250\235\322\"\235\343f\353\357\030Ap\265EYI\252\225-\036\276\302x\352\351\326\323A\247pa\255\300f ,\223\017\b"
+}
+network_id: 11111
+timestamp: 1730363720871
+version: 1
+
+2024-10-31 16:35:21 INFO  - received HANDSHAKE_HELLO from /65.108.96.206:18888
+2024-10-31 16:35:21 INFO  - Try to close channel: /65.108.96.206:18888, reason: TOO_MANY_PEERS
+2024-10-31 16:35:21 INFO  - channel /65.108.96.206:18888 closed 
+2024-10-31 16:35:21 INFO  - Channel /65.108.96.206:18888 closed normally.

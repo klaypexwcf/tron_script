@@ -1,0 +1,55 @@
+2024-11-06 14:11:32 INFO  - MainClass: Starting task2 for 65.109.89.115
+2024-11-06 14:11:32 INFO  - MainClass: Starting task1 for 65.109.89.115
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:34 WARN  - Connect to peer /65.109.89.115:18888 fail, cause:connection timed out: /65.109.89.115:18888
+2024-11-06 14:11:34 WARN  - Connect to peer /65.109.89.115:18888 fail, cause:connection timed out: /65.109.89.115:18888
+2024-11-06 14:11:34 INFO  - channel /65.109.89.115:18888 closed 
+2024-11-06 14:11:34 INFO  - channel /65.109.89.115:18888 closed 
+2024-11-06 14:11:34 INFO  - Channel /65.109.89.115:18888 closed normally.
+2024-11-06 14:11:34 INFO  - Channel /65.109.89.115:18888 closed normally.
+2024-11-06 14:12:34 INFO  - entering func connectAsync1
+2024-11-06 14:12:34 INFO  - entering func connectAsync2
+2024-11-06 14:12:34 INFO  - entering func connectAsync1
+2024-11-06 14:12:34 INFO  - Close channel:null
+2024-11-06 14:12:34 INFO  - entering func connectAsync2
+2024-11-06 14:12:34 INFO  - Close channel:null
+2024-11-06 14:12:36 WARN  - Connect to peer /65.109.89.115:18888 fail, cause:connection timed out: /65.109.89.115:18888
+2024-11-06 14:12:36 INFO  - channel /65.109.89.115:18888 closed 
+2024-11-06 14:12:36 INFO  - Channel /65.109.89.115:18888 closed normally.
+2024-11-06 14:12:36 WARN  - Connect to peer /65.109.89.115:18888 fail, cause:connection timed out: /65.109.89.115:18888
+2024-11-06 14:12:36 INFO  - channel /65.109.89.115:18888 closed 
+2024-11-06 14:12:36 INFO  - Channel /65.109.89.115:18888 closed normally.
+2024-11-06 14:13:36 INFO  - entering func connectAsync1
+2024-11-06 14:13:36 INFO  - entering func connectAsync2
+2024-11-06 14:13:36 INFO  - Close channel:null
+2024-11-06 14:13:36 INFO  - entering func connectAsync1
+2024-11-06 14:13:36 INFO  - entering func connectAsync2
+2024-11-06 14:13:36 INFO  - Close channel:null
+2024-11-06 14:13:37 INFO  - Send message to channel /65.109.89.115:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873616722
+version: 1
+
+2024-11-06 14:13:38 INFO  - received HANDSHAKE_HELLO from /65.109.89.115:18888, [HelloMessage: from {
+  address: "127.0.0.1"
+  port: 18888
+  nodeId: "\260\3104\037\365#3x4\006yb\217Y\275M\314B\325\034\345i|\217Q\261F\333-\325z\236\003\n n\361\002\245*\340]\353i\373\367\267\215\307\375\306-AB\021\022P\254c\332\225\353\331\347"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873616722
+version: 1
+
+2024-11-06 14:13:38 INFO  - Try to close channel: /65.109.89.115:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:13:38 INFO  - channel /65.109.89.115:18888 closed 
+2024-11-06 14:13:38 INFO  - Channel /65.109.89.115:18888 closed normally.
+2024-11-06 14:13:38 WARN  - Connect to peer /65.109.89.115:18888 fail, cause:connection timed out: /65.109.89.115:18888
+2024-11-06 14:13:38 INFO  - channel /65.109.89.115:18888 closed 
+2024-11-06 14:13:38 INFO  - Channel /65.109.89.115:18888 closed normally.

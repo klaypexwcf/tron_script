@@ -1,0 +1,29 @@
+<configuration>
+
+    <!-- SiftingAppender 根据 MDC 中的 customFileName 动态生成文件名 -->
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator class="ch.qos.logback.classic.sift.MDCBasedDiscriminator">
+            <key>customFileName</key>
+            <defaultValue>default</defaultValue>
+        </discriminator>
+
+        <sift>
+            <appender name="THREAD_FILE_%customFileName" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>logs/${customFileName}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                    <fileNamePattern>logs/${customFileName}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                    <maxFileSize>10MB</maxFileSize>
+                    <maxHistory>30000</maxHistory>
+                    <totalSizeCap>40GB</totalSizeCap>
+                </rollingPolicy>
+                <encoder>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="SIFT"/>
+    </root>
+</configuration>

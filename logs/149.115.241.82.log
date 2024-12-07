@@ -1,0 +1,74 @@
+2024-11-06 14:11:32 INFO  - MainClass: Starting task2 for 149.115.241.82
+2024-11-06 14:11:32 INFO  - MainClass: Starting task1 for 149.115.241.82
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync1
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:32 INFO  - entering func connectAsync2
+2024-11-06 14:11:33 INFO  - Send message to channel /149.115.241.82:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873492662
+version: 1
+
+2024-11-06 14:11:34 INFO  - received HANDSHAKE_HELLO from /149.115.241.82:18888, [HelloMessage: from {
+  address: "149.115.241.82"
+  port: 18888
+  nodeId: "\353\231\r\250\316[\2537\312\234\375^\v\232I|\320E\276\370(\021h\214\342d\266\000KW\203E3\335\227q\rd\330\206\376\033\240\271\313<$\353w\346w\220\344\223\330=\302Q\266\233%\312%\226"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873492662
+version: 1
+
+2024-11-06 14:11:34 INFO  - Try to close channel: /149.115.241.82:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:11:34 INFO  - channel /149.115.241.82:18888 closed 
+2024-11-06 14:11:34 INFO  - Channel /149.115.241.82:18888 closed normally.
+2024-11-06 14:11:34 WARN  - Connect to peer /149.115.241.82:18888 fail, cause:connection timed out: /149.115.241.82:18888
+2024-11-06 14:11:34 INFO  - channel /149.115.241.82:18888 closed 
+2024-11-06 14:11:34 INFO  - Channel /149.115.241.82:18888 closed normally.
+2024-11-06 14:12:34 INFO  - entering func connectAsync1
+2024-11-06 14:12:34 INFO  - entering func connectAsync2
+2024-11-06 14:12:34 INFO  - Close channel:/149.115.241.82:18888
+2024-11-06 14:12:34 INFO  - entering func connectAsync1
+2024-11-06 14:12:34 INFO  - entering func connectAsync2
+2024-11-06 14:12:34 INFO  - Close channel:null
+2024-11-06 14:12:35 INFO  - Send message to channel /149.115.241.82:18888, [HelloMessage: from {
+  address: "10.21.213.106"
+  port: 18899
+  nodeId: "\305$\222Ich\237\334\364\355i\274\'Js\244\235\243!\"\274\026L_\177\310\021\226\344\177\v\266\252\271\376\272|\252!\022Z\301qn\3277R\nm\rC\222U.\332\302\232\317B\354\306\324\366\264"
+}
+network_id: 11111
+timestamp: 1730873554101
+version: 1
+
+2024-11-06 14:12:35 INFO  - received HANDSHAKE_HELLO from /149.115.241.82:18888, [HelloMessage: from {
+  address: "149.115.241.82"
+  port: 18888
+  nodeId: "\353\231\r\250\316[\2537\312\234\375^\v\232I|\320E\276\370(\021h\214\342d\266\000KW\203E3\335\227q\rd\330\206\376\033\240\271\313<$\353w\346w\220\344\223\330=\302Q\266\233%\312%\226"
+}
+network_id: 11111
+code: 1
+timestamp: 1730873554101
+version: 1
+
+2024-11-06 14:12:35 INFO  - Try to close channel: /149.115.241.82:18888, reason: TOO_MANY_PEERS
+2024-11-06 14:12:35 INFO  - channel /149.115.241.82:18888 closed 
+2024-11-06 14:12:35 INFO  - Channel /149.115.241.82:18888 closed normally.
+2024-11-06 14:12:36 WARN  - Connect to peer /149.115.241.82:18888 fail, cause:connection timed out: /149.115.241.82:18888
+2024-11-06 14:12:36 INFO  - channel /149.115.241.82:18888 closed 
+2024-11-06 14:12:36 INFO  - Channel /149.115.241.82:18888 closed normally.
+2024-11-06 14:13:35 INFO  - entering func connectAsync1
+2024-11-06 14:13:35 INFO  - entering func connectAsync2
+2024-11-06 14:13:35 INFO  - Close channel:/149.115.241.82:18888
+2024-11-06 14:13:36 INFO  - entering func connectAsync1
+2024-11-06 14:13:36 INFO  - entering func connectAsync2
+2024-11-06 14:13:36 INFO  - Close channel:null
+2024-11-06 14:13:37 WARN  - Connect to peer /149.115.241.82:18888 fail, cause:connection timed out: /149.115.241.82:18888
+2024-11-06 14:13:37 INFO  - channel /149.115.241.82:18888 closed 
+2024-11-06 14:13:37 INFO  - Channel /149.115.241.82:18888 closed normally.
+2024-11-06 14:13:38 WARN  - Connect to peer /149.115.241.82:18888 fail, cause:connection timed out: /149.115.241.82:18888
+2024-11-06 14:13:38 INFO  - channel /149.115.241.82:18888 closed 
+2024-11-06 14:13:38 INFO  - Channel /149.115.241.82:18888 closed normally.
