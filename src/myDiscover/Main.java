@@ -34,11 +34,11 @@ public class Main {
         for (NodeIdBucket nodeIdBucket: nodeIdTable1.getNodeIdTable()){
             for (NodeId nodeId:nodeIdBucket.getNodeBucket()){
                 Random random = new Random();
-                Thread.sleep(random.nextInt(6000));
+                Thread.sleep(random.nextInt(12000));
                 MyEventHandler myEventHandler=new MyEventHandler(null);
                 NioEventLoopGroup group = new NioEventLoopGroup();
                 Bootstrap bootstrap = getBootstrap(group, myEventHandler);
-                Channel channel =bootstrap.bind( new InetSocketAddress("10.122.243.248",18889+count)).sync().channel();
+                Channel channel =bootstrap.bind( new InetSocketAddress("10.21.213.106",18889+count)).sync().channel();
                 count++;
                 MyMessageHandler myMessageHandler = (MyMessageHandler) channel.pipeline().last();
                 messageHandlerMap.put(18889+count,myMessageHandler);

@@ -4,8 +4,10 @@ import org.tron.p2p.discover.message.Message;
 
 import java.net.InetSocketAddress;
 public class UdpEvent {
-    private final Message message;
-    private final InetSocketAddress address;
+    private Message message;
+    //when receive UdpEvent, this is sender address
+    //when send UdpEvent, this is target address
+    private InetSocketAddress address;
 
     public UdpEvent(Message message, InetSocketAddress address) {
         this.message = message;
@@ -16,7 +18,15 @@ public class UdpEvent {
         return message;
     }
 
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+
     public InetSocketAddress getAddress() {
         return address;
+    }
+
+    public void setAddress(InetSocketAddress address) {
+        this.address = address;
     }
 }
