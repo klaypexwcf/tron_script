@@ -17,6 +17,7 @@ import org.tron.p2p.discover.Node;
 import org.tron.p2p.exception.P2pException;
 import org.tron.p2p.protos.Discover;
 import org.tron.p2p.utils.ByteArray;
+import org.tron.p2p.utils.NetUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,11 +33,18 @@ public class  MyConfig {
     private static Node to;
     @Getter
     private static byte[] remoteId ={15, -42, -82, 24, 123, 32, -60, 12, -42, -29, 68, 80, 99, 125, 97, 107, -121, 19, 116, -5, 35, -123, 100, 95, 65, 87, -30, 79, -5, -105, -122, 46, -13, -91, 27, -40, -72, 108, -16, -80, -23, -122, 49, -32, 41, 32, -58, 94, -116, -31, -102, -36, 122, 83, -128, 3, 60, -81, 121, -2, 45, 5, -43, 107};
-    @Getter@Setter
-    private static byte[] localId ={-49, -117, 20, 19, -71, 85, -16, 57, 5, -59, -22, -79, -103, -118, -12, 54, 92, -77, 13, 71, 35, 75, 41, -91, -101, -38, -76, -47, -106, 116, -1, 7, -43, 23, -63, 27, 122, 107, -67, 127, -44, 67, 79, 43, 55, 117, -46, 18, 118, 5, 17, 39, -90, 52, 50, 12, 62, 11, 47, 29, -67, -75, 68, -14};
+
+    public static byte[] getLocalId() {
+        return localId;
+    }
+
+    @Setter
+    private static byte[] localId ={-50, -117, 20, 19, -71, 85, -16, 57, 5, -59, -22, -79, -103, -118, -12, 54, 92, -77, 13, 71, 35, 75, 41, -91, -101, -38, -76, -47, -106, 116, -1, 7, -43, 23, -63, 27, 122, 107, -67, 127, -44, 67, 79, 43, 55, 117, -46, 18, 118, 5, 17, 39, -90, 52, 50, 12, 62, 11, 47, 29, -67, -75, 68, -14};
     @Setter
     @Getter
-    private static String localIp;
+    private static String localIp= NetUtil.getExternalIpV4();
+    //TODO:检查这部分
+    //关键问题：内网节点如何正确填入自己的外部地址并与其他节点通信
     @Getter
     private static int fromPort=18899;
     @Getter
@@ -44,7 +52,7 @@ public class  MyConfig {
     @Getter
 
     private static String toIp="81.70.23.5";
-
+    //private static String toIp ="58.87.95.60";
     @Getter
     private static int network=11111;
     @Getter
@@ -96,7 +104,6 @@ public class  MyConfig {
     }
     public static void test(){
         System.out.println("localId: "+Tool.encodeToBase64(localId));
-
     }
     public static void init(){
         to = new Node(remoteId,toIp,"",toPort);
@@ -315,6 +322,13 @@ public class  MyConfig {
                 .setPort(fromPort);
         builder.setAddress(ByteString.copyFrom(org.tron.p2p.utils.ByteArray.fromString(localIp)));
         builder.setNodeId(ByteString.copyFrom(localId));
+        return builder.build();
+    }
+    public static org.tron.protos.Discover.Endpoint getEndpointFromNode(Node node){
+        org.tron.protos.Discover.Endpoint.Builder builder = org.tron.protos.Discover.Endpoint.newBuilder()
+                .setPort(node.getPort());
+        builder.setAddress(ByteString.copyFrom(org.tron.p2p.utils.ByteArray.fromString(node.getHostV4())));
+        builder.setNodeId(ByteString.copyFrom(node.getId()));
         return builder.build();
     }
 }

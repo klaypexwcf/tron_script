@@ -1,5 +1,7 @@
 package myDiscover;
 
+import myDiscover.message.MyKadPongMessage;
+import myDiscover.table.NodeId;
 import org.tron.p2p.discover.message.Message;
 import org.tron.p2p.discover.message.MessageType;
 
@@ -11,15 +13,15 @@ public class MyEventHandler {
     public MyEventHandler(MyMessageHandler messageHandler) {
         this.messageHandler = messageHandler;
     }
-    public void handleEvent(UdpEvent udpEvent) {
+    public void handleEvent(MyUdpEvent myUdpEvent, NodeId localNodeId, int fromPort) {
         // 处理接收到的事件
-        System.out.println("Handling event: " + udpEvent.getMessage().getType().toString());
-        Message msg = udpEvent.getMessage();
+        System.out.println("Handling event: " + myUdpEvent.getMessage().getType().toString());
+        Message msg = myUdpEvent.getMessage();
         if (msg.getType()== MessageType.KAD_PING){
             //回复收到的Kad_ping
             System.out.println("received msg type kad_ping"+System.currentTimeMillis());
-            Message pongReply=new MyKadPongMessage();
-            UdpEvent replyEvent = new UdpEvent(pongReply,udpEvent.getAddress());
+            Message pongReply=new MyKadPongMessage(localNodeId,fromPort);
+            MyUdpEvent replyEvent = new MyUdpEvent(pongReply, myUdpEvent.getAddress());
             messageHandler.accept(replyEvent);
         }
         else if (msg.getType()==MessageType.KAD_PONG) {

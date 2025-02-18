@@ -1,4 +1,6 @@
-package myDiscover;
+package myDiscover.table;
+
+import myDiscover.Tool;
 
 import java.util.Arrays;
 
@@ -17,6 +19,8 @@ public class NodeId {
         this.nodeId = nodeId;
     }
 
+    public byte[] getLowerBytesId(){return Tool.toPrimitive(this.nodeId);}
+    public String getHexId(){return Tool.byteArrayToHexString(getLowerBytesId());}
     @Override
     public String toString() {
         return "NodeId{" +

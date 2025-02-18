@@ -4,7 +4,6 @@ import myConnection.MessageProcess;
 import myConnection.MyChannel;
 import myConnection.MyChannelManager;
 import myConnection.message.MyMessage;
-import myConnection.message.MyPingMessage;
 import myConnection.message.MyPongMessage;
 import myDiscover.MyConfig;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
@@ -32,19 +31,41 @@ public class MyKeepAliveService implements MessageProcess {
 //                                    p.send(new MyP2pDisconnectMessage(Connect.DisconnectReason.PING_TIMEOUT));
 //                                    p.close();
                                 }
+
                             } else {
                                 if (now - p.getLastSendTime() > MyConfig.PING_TIMEOUT && p.isFinishHandshake()) {
-                                    p.send(new MyPingMessage());
+                                    p.sendPingMsg();
                                     p.waitForPong = true;
                                     p.pingSent = now;
                                 }
                             }
-                            //p.send(new MyPongMessage());
+                            p.send(new MyPongMessage());
+                            System.out.println("sent pong to channel "+p.getLocalPort());
+                        });
+
+                MyChannelManager.getChannelsForIncomingAttack().values().stream()
+                        .filter(p -> !p.isDisconnect())
+                        .forEach(p -> {
+                            if (p.waitForPong) {
+                                if (now - p.pingSent > MyConfig.KEEP_ALIVE_TIMEOUT) {
+//                                    p.send(new MyP2pDisconnectMessage(Connect.DisconnectReason.PING_TIMEOUT));
+//                                    p.close();
+                                }
+
+                            } else {
+                                if (now - p.getLastSendTime() > MyConfig.PING_TIMEOUT && p.isFinishHandshake()) {
+                                    p.sendPingMsg();
+                                    p.waitForPong = true;
+                                    p.pingSent = now;
+                                }
+                            }
+                            p.send(new MyPongMessage());
+                            System.out.println("sent pong to channel "+p.getLocalPort());
                         });
             } catch (Exception t) {
                 //log.error("Exception in keep alive task", t);
             }
-        }, 2, 2, TimeUnit.SECONDS);
+        }, 500, 1000, TimeUnit.MILLISECONDS);
     }
 
     public void close() {
@@ -55,7 +76,7 @@ public class MyKeepAliveService implements MessageProcess {
     public void processMessage(MyChannel channel, MyMessage message) {
         switch (message.getType()) {
             case KEEP_ALIVE_PING:
-                channel.send(new MyPongMessage());
+                channel.sendPongMsg();
                 try {
                     TimeUnit.SECONDS.sleep(5);
                 } catch (InterruptedException e) {

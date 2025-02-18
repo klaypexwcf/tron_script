@@ -7,7 +7,14 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import myConnection.MyChannelManager;
+import myDiscover.message.MyKadPingMessage;
+import myDiscover.table.NodeId;
+import myDiscover.table.NodeIdBucket;
+import myDiscover.table.NodeIdTable;
+import org.tron.p2p.discover.protocol.kad.table.NodeEntry;
 import org.tron.p2p.stats.TrafficStats;
+import test.NodeTableTest;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
@@ -27,22 +34,25 @@ public class Main {
         MyConfig.test();
         //初始化netty框架
 
+        //初始化NodeTable
         NodeIdTable nodeIdTable1 =new NodeIdTable();
         Byte[] byteId = Tool.toByteArray(MyConfig.getRemoteId());
         nodeIdTable1.init(new NodeId(byteId));
-
+        //初始化TCP监听
+        MyChannelManager.ListeningInit(18889,272,nodeIdTable1);
+        //启动UDP Kad_ping 发送程序
         for (NodeIdBucket nodeIdBucket: nodeIdTable1.getNodeIdTable()){
             for (NodeId nodeId:nodeIdBucket.getNodeBucket()){
                 Random random = new Random();
-                Thread.sleep(random.nextInt(12000));
+                Thread.sleep(random.nextInt(10));
                 MyEventHandler myEventHandler=new MyEventHandler(null);
                 NioEventLoopGroup group = new NioEventLoopGroup();
-                Bootstrap bootstrap = getBootstrap(group, myEventHandler);
-                Channel channel =bootstrap.bind( new InetSocketAddress("10.21.213.106",18889+count)).sync().channel();
-                count++;
+                Bootstrap bootstrap = getBootstrap(group, myEventHandler,nodeId,18889+count);
+                Channel channel =bootstrap.bind( new InetSocketAddress("10.2.8.6",18889+count)).sync().channel();
                 MyMessageHandler myMessageHandler = (MyMessageHandler) channel.pipeline().last();
                 messageHandlerMap.put(18889+count,myMessageHandler);
                 newPingThread(MyConfig.getLocalIp(),18889+count,nodeId,myMessageHandler,MyConfig.getTo().getInetSocketAddressV4());
+                count++;
             }
         }
 //        try {
@@ -73,7 +83,7 @@ public class Main {
 //        }
     }
 
-    private static Bootstrap getBootstrap(NioEventLoopGroup group, MyEventHandler myEventHandler) {
+    public static Bootstrap getBootstrap(NioEventLoopGroup group, MyEventHandler myEventHandler,NodeId localTmpId,int fromPort) {
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioDatagramChannel.class)
@@ -85,7 +95,7 @@ public class Main {
                         ch.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
                         ch.pipeline().addLast(new ProtobufVarint32FrameDecoder());
                         ch.pipeline().addLast(new MyP2pPacketDecoder());
-                        MyMessageHandler messageHandler = new MyMessageHandler(ch, myEventHandler);
+                        MyMessageHandler messageHandler = new MyMessageHandler(ch, myEventHandler,localTmpId,fromPort);
                         myEventHandler.setMessageHandler(messageHandler);
                         ch.pipeline().addLast(messageHandler);
                     }
@@ -93,13 +103,13 @@ public class Main {
         return bootstrap;
     }
 
-    public static void startSendingMessages(Channel channel, MyMessageHandler messageHandler, UdpEvent udpEvent) {
+    public static void startSendingMessages(Channel channel, MyMessageHandler messageHandler, MyUdpEvent myUdpEvent) {
         new Thread(() -> {
             try {
                 while (true) {
                     // 发送消息
                     //System.out.println("Sending message...");
-                    messageHandler.accept(udpEvent);
+                    messageHandler.accept(myUdpEvent);
 
                     // 设置发送间隔，避免过于频繁
                     Thread.sleep(10000); // 每隔10秒发送一次
@@ -130,17 +140,20 @@ public class Main {
 
             //MyMessageHandler myMessageHandler = (MyMessageHandler) channel.pipeline().last();
             MyKadPingMessage PingMsg = new MyKadPingMessage(nodeId, localPort);
-            UdpEvent udpEvent = new UdpEvent(PingMsg, targetAddress);
+            MyUdpEvent myUdpEvent = new MyUdpEvent(PingMsg, targetAddress);
 
             new Thread(() -> {
                 try {
                     while (true) {
                         // 发送消息
-                        System.out.println("Sending message... with port "+localPort);
-                        messageHandler.accept(udpEvent);
+                        int distance = NodeEntry.distance(MyConfig.getRemoteId(),Tool.toPrimitive(nodeId.getNodeId()));
+                        System.out.println("Sending message... with port "+localPort+" with target bucket: "+ NodeTableTest.getBucketId(distance));
+                        byte[] nodeBytes = Tool.toPrimitive(nodeId.getNodeId()) ;
+                        System.out.println("nodeId: "+nodeBytes[0]+" "+nodeBytes[1]+" "+nodeBytes[2]+" "+nodeBytes[3]);
+                        messageHandler.accept(myUdpEvent);
 
                         // 设置发送间隔，避免过于频繁
-                        Thread.sleep(10000); // 每隔10秒发送一次
+                        Thread.sleep(5000); // 每隔5秒发送一次
                     }
 
                 } catch (InterruptedException e) {

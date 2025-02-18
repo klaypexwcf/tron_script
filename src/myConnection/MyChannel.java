@@ -1,11 +1,6 @@
 package myConnection;
 
 import com.google.common.base.Throwables;
-import myConnection.higher.MyHMessage.MyHHelloMessage;
-import myConnection.message.MyHelloMessage;
-import myConnection.message.MyMessage;
-import myConnection.socket.MyMessageHandler;
-import myConnection.socket.MyP2pProtobufVariant32FrameDecoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -18,14 +13,20 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import myConnection.higher.MyHMessage.MyHDisconnectMessage;
+import myConnection.higher.MyHMessage.MyHHelloMessage;
+import myConnection.message.*;
+import myConnection.socket.MyMessageHandler;
+import myConnection.socket.MyP2pProtobufVariant32FrameDecoder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
-import org.tron.p2p.connection.ChannelManager;
 import org.tron.p2p.connection.business.upgrade.UpgradeController;
 import org.tron.p2p.discover.Node;
 import org.tron.p2p.exception.P2pException;
+import org.tron.p2p.protos.Connect;
 import org.tron.p2p.stats.TrafficStats;
 import org.tron.p2p.utils.ByteArray;
+import org.tron.protos.Protocol;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -33,6 +34,8 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import static myConnection.socket.MyP2pChannelInitializer.DISCONNECT_REASON_KEY;
 
 @Slf4j()
 public class MyChannel {
@@ -45,15 +48,22 @@ public class MyChannel {
     @Getter
     public MyHHelloMessage hHelloMessage;
     @Getter
-    private Node node;
+    private Node remoteNode;
     @Getter
     private int version;
     @Getter
+    private int localPort;
+    @Getter
+    private String localNodeId;
+    @Getter
     private ChannelHandlerContext ctx;
     @Getter
-    private InetSocketAddress inetSocketAddress;
+    private InetSocketAddress remoteInetSocketAddress;
     @Getter
-    private InetAddress inetAddress;
+    @Setter
+    private String disconnectReason="";
+    @Getter
+    private InetAddress remoteInetAddress;
     @Getter
     private volatile long disconnectTime;
     @Getter
@@ -73,7 +83,7 @@ public class MyChannel {
     private volatile boolean finishHandshake;
     @Getter
     @Setter
-    private String nodeId;
+    private String remoteNodeId;
     @Setter
     @Getter
     private boolean discoveryMode;
@@ -81,10 +91,12 @@ public class MyChannel {
     private long avgLatency;
     private long count;
 
-    public void init(ChannelPipeline pipeline, String nodeId, boolean discoveryMode) {
+    public void init(ChannelPipeline pipeline, String remoteNodeId, boolean discoveryMode,int localPort,String localNodeId) {
+        this.localNodeId = localNodeId;
+        this.localPort = localPort;
         this.discoveryMode = discoveryMode;
-        this.nodeId = nodeId;
-        this.isActive = StringUtils.isNotEmpty(nodeId);
+        this.remoteNodeId = remoteNodeId;
+        this.isActive = StringUtils.isNotEmpty(remoteNodeId);
         MyMessageHandler messageHandler = new MyMessageHandler(this);
         pipeline.addLast("readTimeoutHandler", new ReadTimeoutHandler(60, TimeUnit.SECONDS));
         pipeline.addLast(TrafficStats.tcp);
@@ -112,40 +124,63 @@ public class MyChannel {
         } else {
             log.error("Close peer {}, exception caught", address, throwable);
         }
-        close();
+        close(throwable.getMessage());
     }
 
     public void setHelloMessage(MyHelloMessage helloMessage) {
         this.helloMessage = helloMessage;
-        this.node = helloMessage.getFrom();
-        this.nodeId = node.getHexId(); //update node id from handshake
+        this.remoteNode = helloMessage.getFrom();
+        this.remoteNodeId = remoteNode.getHexId(); //update node id from handshake
         this.version = helloMessage.getVersion();
     }
 
     public void setChannelHandlerContext(ChannelHandlerContext ctx) {
         this.ctx = ctx;
-        this.inetSocketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-        this.inetAddress = inetSocketAddress.getAddress();
+        this.remoteInetSocketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
+        this.remoteInetAddress = remoteInetSocketAddress.getAddress();
         this.isTrustPeer =false;
     }
 
-    public void close(long banTime) {
+    public void close(long banTime,String reason) {
         this.isDisconnect = true;
         this.disconnectTime = System.currentTimeMillis();
-        ChannelManager.banNode(this.inetAddress, banTime);
+        disconnectReason =reason;
+        ctx.attr(DISCONNECT_REASON_KEY).set(disconnectReason);
+        System.out.println("channel "+ localPort+ " closed because "+reason);
+        //MyChannelManager.banNode(this.remoteInetAddress, banTime);
         ctx.close();
     }
 
-    public void close() {
-        close(1L);
+    public void close(String reason) {
+        close(1L,reason);
     }
-
+    public void sendStatusMsg(){
+        MyStatusMessage statusMessage = new MyStatusMessage(localPort,localNodeId);
+        send(statusMessage);
+    }
+    public void sendP2PDisconnectMsg(Connect.DisconnectReason disconnectReason){
+        send(new MyP2pDisconnectMessage(disconnectReason));
+    }
+    public void sendPingMsg(){
+        send(new MyPingMessage());
+    }
+    public void sendPongMsg(){
+        send(new MyPongMessage());
+    }
+    public void sendHDisconnectMsg(Protocol.ReasonCode reasonCode){
+        send(new MyHDisconnectMessage(reasonCode).getSendBytes());
+    }
+    public void sendHHelloMsg(int localPort,String localNodeId){
+        MyHHelloMessage myHHelloMessage= new MyHHelloMessage(localPort,localNodeId);
+        send(myHHelloMessage.getSendBytes());
+        setHHelloMessage(myHHelloMessage);
+    }
     public void send(MyMessage message) {
-        MDC.put("customFileName",inetAddress.getHostAddress());
+        MDC.put("customFileName", remoteInetAddress.getHostAddress());
         if (message.needToLog()) {
-            log.info("Send message to channel {}, {}", inetSocketAddress, message);
+            log.info("Send message to channel {}, {}", remoteInetSocketAddress, message);
         } else {
-            log.debug("Send message to channel {}, {}", inetSocketAddress, message);
+            log.debug("Send message to channel {}, {}", remoteInetSocketAddress, message);
         }
         //MDC.remove("customFileName");
         send(message.getSendData());
@@ -174,7 +209,7 @@ public class MyChannel {
             });
             setLastSendTime(System.currentTimeMillis());
         } catch (Exception e) {
-            log.warn("Send message to {} failed, {}", inetSocketAddress, e.getMessage());
+            log.warn("Send message to {} failed, {}", remoteInetSocketAddress, e.getMessage());
             ctx.channel().close();
         }
     }
@@ -194,17 +229,17 @@ public class MyChannel {
             return false;
         }
         MyChannel channel = (MyChannel) o;
-        return Objects.equals(inetSocketAddress, channel.inetSocketAddress);
+        return Objects.equals(remoteInetSocketAddress, channel.remoteInetSocketAddress);
     }
 
     @Override
     public int hashCode() {
-        return inetSocketAddress.hashCode();
+        return remoteInetSocketAddress.hashCode();
     }
 
     @Override
     public String toString() {
-        return String.format("%s | %s", inetSocketAddress,
-                StringUtils.isEmpty(nodeId) ? "<null>" : nodeId);
+        return String.format("%s | %s", remoteInetSocketAddress,
+                StringUtils.isEmpty(remoteNodeId) ? "<null>" : remoteNodeId);
     }
 }

@@ -3,7 +3,6 @@ package myConnection.higher.H_handshake;
 import lombok.extern.slf4j.Slf4j;
 import myConnection.MyChannel;
 import myConnection.MyChannelManager;
-import myConnection.higher.MyHMessage.MyHDisconnectMessage;
 import myConnection.higher.MyHMessage.MyHHelloMessage;
 import myDiscover.MyConfig;
 import org.tron.p2p.utils.ByteArray;
@@ -33,15 +32,15 @@ public class MyHHandshake {
         if (!msg.valid()) {
             log.warn("Peer {} invalid hello message parameters, GenesisBlockId: {}, SolidBlockId: {}, "
                             + "HeadBlockId: {}, address: {}, sig: {}, codeVersion: {}",
-                    channel.getInetSocketAddress(),
+                    channel.getRemoteInetSocketAddress(),
                     ByteArray.toHexString(msg.getInstance().getGenesisBlockId().getHash().toByteArray()),
                     ByteArray.toHexString(msg.getInstance().getSolidBlockId().getHash().toByteArray()),
                     ByteArray.toHexString(msg.getInstance().getHeadBlockId().getHash().toByteArray()),
                     msg.getInstance().getAddress().toByteArray().length,
                     msg.getInstance().getSignature().toByteArray().length,
                     msg.getInstance().getCodeVersion().toByteArray().length);
-            channel.send((new MyHDisconnectMessage(Protocol.ReasonCode.UNEXPECTED_IDENTITY).getSendBytes()));
-            channel.close();
+            channel.sendHDisconnectMsg(Protocol.ReasonCode.UNEXPECTED_IDENTITY);
+            channel.close("UNEXPECTED_IDENTITY");
             return;
         }
 
@@ -112,12 +111,7 @@ public class MyHHandshake {
     }
 
     private static void sendHelloMessage(MyChannel channel) {
-        MyHHelloMessage message = new MyHHelloMessage();
-        //relayService.fillHelloMessage(message, peer.getChannel());
-        log.info("send P2P_HELLO to channel {}",channel.getInetSocketAddress());
-        log.info("My P2P Hello {}",message);
-        channel.send(message.getSendBytes());
-        channel.setHHelloMessage(message);
-        MyConfig.setHelloMessageSend(message);
+        log.info("send P2P_HELLO to channel {}",channel.getRemoteInetSocketAddress());
+        channel.sendHHelloMsg(channel.getLocalPort(),channel.getLocalNodeId());
     }
 }

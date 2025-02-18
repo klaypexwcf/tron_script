@@ -24,7 +24,7 @@ public class MyP2pPacketDecoder extends MessageToMessageDecoder<DatagramPacket> 
         byte[] encoded = new byte[length];
         buf.readBytes(encoded);
         try {
-            UdpEvent event = new UdpEvent(Message.parse(encoded), packet.sender());
+            MyUdpEvent event = new MyUdpEvent(Message.parse(encoded), packet.sender());
 
             out.add(event);
         } catch (P2pException pe) {

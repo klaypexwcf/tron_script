@@ -1,7 +1,8 @@
 package myConnection.message;
 
+import myConnection.MyChannelManager;
 import myDiscover.MyConfig;
-import org.tron.p2p.connection.ChannelManager;
+import myDiscover.Tool;
 import org.tron.p2p.connection.message.MessageType;
 import org.tron.p2p.discover.Node;
 import org.tron.p2p.protos.Connect;
@@ -22,9 +23,23 @@ public class MyStatusMessage extends MyMessage {
     this.statusMessage = Connect.StatusMessage.newBuilder()
       .setFrom(endpoint)
       .setMaxConnections(10000)
-      .setCurrentConnections(ChannelManager.getChannels().size())
+      .setCurrentConnections(MyChannelManager.getChannels().size()+MyChannelManager.getChannelsForIncomingAttack().size())
       .setNetworkId(MyConfig.getNetwork())
       .setTimestamp(System.currentTimeMillis()).build();
+    this.data = statusMessage.toByteArray();
+    System.out.println("new Status Msg with RemainConn:"+this.getRemainConnections());
+  }
+  public MyStatusMessage(int localPort,String localNodeId){
+    super(MessageType.STATUS, null);
+    byte[] nodeId = Tool.hexStringToByteArray(localNodeId);
+    Node myNode = new Node(nodeId,MyConfig.getLocalIp(),"",localPort,localPort);
+    Discover.Endpoint endpoint = Tool.getEndpointFromNode(myNode);
+    this.statusMessage = Connect.StatusMessage.newBuilder()
+            .setFrom(endpoint)
+            .setMaxConnections(10000)
+            .setCurrentConnections(MyChannelManager.getChannels().size()+MyChannelManager.getChannelsForIncomingAttack().size())
+            .setNetworkId(MyConfig.getNetwork())
+            .setTimestamp(System.currentTimeMillis()).build();
     this.data = statusMessage.toByteArray();
     System.out.println("new Status Msg with RemainConn:"+this.getRemainConnections());
   }

@@ -1,5 +1,8 @@
-package myDiscover;
+package myDiscover.message;
 
+import myDiscover.MyConfig;
+import myDiscover.table.NodeId;
+import myDiscover.Tool;
 import org.tron.p2p.discover.Node;
 import org.tron.p2p.discover.message.MessageType;
 import org.tron.p2p.discover.message.kad.KadMessage;
@@ -26,7 +29,7 @@ public class MyKadPingMessage extends KadMessage {
        this.data = this.pingMessage.toByteArray();
    }
 
-    public MyKadPingMessage(NodeId nodeId,int fromport) {
+    public MyKadPingMessage(NodeId nodeId, int fromport) {
         super(MessageType.KAD_PING, null);
 
         Node myNode = new Node(Tool.toPrimitive(nodeId.getNodeId()),MyConfig.getLocalIp(),"",fromport);

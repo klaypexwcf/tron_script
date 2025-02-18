@@ -1,8 +1,8 @@
 package myConnection.higher.MyHMessage;
 
-import myDiscover.MyConfig;
 import com.google.protobuf.ByteString;
 import lombok.Getter;
+import myDiscover.MyConfig;
 import myDiscover.Tool;
 import org.apache.commons.lang3.StringUtils;
 import org.tron.common.utils.StringUtil;
@@ -42,6 +42,36 @@ public class MyHHelloMessage extends MyTronMessage{
                 .build();
         Builder builder = Protocol.HelloMessage.newBuilder();
         builder.setFrom(from);
+        builder.setVersion(MyConfig.getNetwork());
+        builder.setTimestamp(System.currentTimeMillis());
+        builder.setGenesisBlockId(gBlockId);
+        builder.setSolidBlockId(hBlockId);
+        builder.setHeadBlockId(hBlockId);
+        builder.setNodeType(0);//Full node
+        builder.setLowestBlockNum(0);
+        builder.setCodeVersion(ByteString.copyFrom(MyConfig.getCodeVersion().getBytes()));
+
+        this.helloMessage = builder.build();
+        this.type = MessageTypes.P2P_HELLO.asByte();
+        this.data = this.helloMessage.toByteArray();
+    }
+    public MyHHelloMessage(int localPort, String localNodeId){
+        byte[] nodeId = Tool.hexStringToByteArray(localNodeId);
+        Node myNode = new Node(nodeId,MyConfig.getLocalIp(),"",localPort,localPort);
+        Endpoint endpoint = MyConfig.getEndpointFromNode(myNode);
+        MyConfig.MyBlockId MyHeadBlockId = MyConfig.getHeadBlockId();
+        Protocol.HelloMessage.BlockId hBlockId = Protocol.HelloMessage.BlockId.newBuilder()
+                .setHash(MyHeadBlockId.getByteString())
+                .setNumber(MyHeadBlockId.getNum())
+                .build();
+        byte[] genesisBytes = Tool.hexStringToByteArray(MyConfig.getGenesisHashHexString());
+        MyConfig.MyBlockId genesisBlockId = new MyConfig.MyBlockId(genesisBytes,0);
+        Protocol.HelloMessage.BlockId gBlockId = Protocol.HelloMessage.BlockId.newBuilder()
+                .setHash(genesisBlockId.getByteString())
+                .setNumber(0)
+                .build();
+        Builder builder = Protocol.HelloMessage.newBuilder();
+        builder.setFrom(endpoint);
         builder.setVersion(MyConfig.getNetwork());
         builder.setTimestamp(System.currentTimeMillis());
         builder.setGenesisBlockId(gBlockId);

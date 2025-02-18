@@ -1,12 +1,11 @@
 package myConnection.handshake;
 
-import myDiscover.MyConfig;
 import myConnection.MessageProcess;
 import myConnection.MyChannel;
 import myConnection.MyChannelManager;
 import myConnection.message.MyHelloMessage;
 import myConnection.message.MyMessage;
-import myConnection.message.MyP2pDisconnectMessage;
+import myDiscover.MyConfig;
 import org.tron.p2p.connection.business.handshake.DisconnectCode;
 import org.tron.p2p.protos.Connect;
 
@@ -16,7 +15,7 @@ public class MyHandshakeService implements MessageProcess {
     private final int networkId = MyConfig.getNetwork();
 
     public void startHandshake(MyChannel channel) {
-        sendHelloMsg(channel, DisconnectCode.NORMAL, channel.getStartTime());
+        sendHelloMsg(channel, DisconnectCode.NORMAL, channel.getStartTime(),channel.getLocalPort(),channel.getLocalNodeId());
     }
 
     @Override
@@ -25,8 +24,8 @@ public class MyHandshakeService implements MessageProcess {
 
         if (channel.isFinishHandshake()) {
             //log.warn("Close channel {}, handshake is finished", channel.getInetSocketAddress());
-            channel.send(new MyP2pDisconnectMessage(Connect.DisconnectReason.DUP_HANDSHAKE));
-            channel.close();
+            channel.sendP2PDisconnectMsg(Connect.DisconnectReason.DUP_HANDSHAKE);
+            channel.close("DUP_HANDSHAKE");
             return;
         }
 
@@ -35,10 +34,10 @@ public class MyHandshakeService implements MessageProcess {
         DisconnectCode code = MyChannelManager.processPeer(channel);
         if (code != DisconnectCode.NORMAL) {
             if (!channel.isActive()) {
-                sendHelloMsg(channel, code, msg.getTimestamp());
+                sendHelloMsg(channel, code, msg.getTimestamp(),channel.getLocalPort(),channel.getLocalNodeId());
             }
             MyChannelManager.logDisconnectReason(channel, getDisconnectReason(code));
-            channel.close();
+            channel.close(getDisconnectReason(code).toString());
             return;
         }
 
@@ -54,27 +53,27 @@ public class MyHandshakeService implements MessageProcess {
                 //v0.1 have version, v0.2 both have version and networkId
 
                 MyChannelManager.logDisconnectReason(channel, getDisconnectReason(disconnectCode));
-                channel.close();
+                channel.close(getDisconnectReason(disconnectCode).toString());
                 return;
             }
         } else {
 
             if (msg.getNetworkId() != networkId) {
 
-                sendHelloMsg(channel, DisconnectCode.DIFFERENT_VERSION, msg.getTimestamp());
+                sendHelloMsg(channel, DisconnectCode.DIFFERENT_VERSION, msg.getTimestamp(),channel.getLocalPort(),channel.getLocalNodeId());
                 MyChannelManager.logDisconnectReason(channel, Connect.DisconnectReason.DIFFERENT_VERSION);
-                channel.close();
+                channel.close("DIFFERENT_VERSION");
                 return;
             }
-            sendHelloMsg(channel, DisconnectCode.NORMAL, msg.getTimestamp());
+            sendHelloMsg(channel, DisconnectCode.NORMAL, msg.getTimestamp(),channel.getLocalPort(),channel.getLocalNodeId());
         }
         channel.setFinishHandshake(true);
         channel.updateAvgLatency(System.currentTimeMillis() - channel.getStartTime());
         MyConfig.hp2pEventHandler.onConnect(channel);
     }
 
-    private void sendHelloMsg(MyChannel channel, DisconnectCode code, long time) {
-        MyHelloMessage helloMessage = new MyHelloMessage(code, time);
+    private void sendHelloMsg(MyChannel channel, DisconnectCode code, long time,int localPort,String localNodeId) {
+        MyHelloMessage helloMessage = new MyHelloMessage(code, time,localPort,localNodeId);
         channel.send(helloMessage);
     }
 }

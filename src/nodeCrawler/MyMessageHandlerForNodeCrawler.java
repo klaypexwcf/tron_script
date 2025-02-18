@@ -1,23 +1,24 @@
-package myDiscover;
+package nodeCrawler;
 
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.channel.socket.DatagramPacket;
-import io.netty.channel.Channel;
+import io.netty.channel.socket.nio.NioDatagramChannel;
+import myDiscover.MyUdpEvent;
 import myDiscover.table.NodeId;
 
 import java.net.InetSocketAddress;
 import java.util.function.Consumer;
 
-public class MyMessageHandler extends SimpleChannelInboundHandler<MyUdpEvent> implements Consumer<MyUdpEvent> {
+public class MyMessageHandlerForNodeCrawler extends SimpleChannelInboundHandler<MyUdpEvent> implements Consumer<MyUdpEvent> {
     private final Channel channel;
-    private final MyEventHandler myEventHandler;
+    private final MyEventHandlerForNodeCrawler myEventHandler;
     private final NodeId localAttackId;
     private final int fromPort;
 
-    public MyMessageHandler(NioDatagramChannel channel, MyEventHandler eventHandler, NodeId localAttackId, int fromPort) {
+    public MyMessageHandlerForNodeCrawler(NioDatagramChannel channel, MyEventHandlerForNodeCrawler eventHandler, NodeId localAttackId, int fromPort) {
         this.channel = channel;
         this.myEventHandler = eventHandler;
         this.localAttackId = localAttackId;

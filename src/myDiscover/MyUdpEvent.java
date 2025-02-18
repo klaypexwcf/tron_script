@@ -3,13 +3,13 @@ package myDiscover;
 import org.tron.p2p.discover.message.Message;
 
 import java.net.InetSocketAddress;
-public class UdpEvent {
+public class MyUdpEvent {
     private Message message;
     //when receive UdpEvent, this is sender address
     //when send UdpEvent, this is target address
     private InetSocketAddress address;
 
-    public UdpEvent(Message message, InetSocketAddress address) {
+    public MyUdpEvent(Message message, InetSocketAddress address) {
         this.message = message;
         this.address = address;
     }

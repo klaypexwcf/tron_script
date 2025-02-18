@@ -7,6 +7,7 @@ import org.tron.p2p.discover.Node;
 import org.tron.p2p.protos.Connect;
 import org.tron.p2p.protos.Discover;
 import org.tron.p2p.utils.NetUtil;
+import myDiscover.Tool;
 
 public class MyHelloMessage extends MyMessage {
     private Connect.HelloMessage helloMessage;
@@ -19,6 +20,19 @@ public class MyHelloMessage extends MyMessage {
     public MyHelloMessage(DisconnectCode code, long time) {
         super(MessageType.HANDSHAKE_HELLO, null);
         Discover.Endpoint endpoint = MyConfig.getHomeNode();
+        this.helloMessage = Connect.HelloMessage.newBuilder()
+                .setFrom(endpoint)
+                .setNetworkId(MyConfig.getNetwork())
+                .setCode(code.getValue())
+                .setVersion(MyConfig.version)
+                .setTimestamp(time).build();
+        this.data = helloMessage.toByteArray();
+    }
+    public MyHelloMessage(DisconnectCode code, long time,int localPort,String localNodeId) {
+        super(MessageType.HANDSHAKE_HELLO, null);
+        byte[] nodeId = Tool.hexStringToByteArray(localNodeId);
+        Node myNode = new Node(nodeId,MyConfig.getLocalIp(),"",localPort,localPort);
+        Discover.Endpoint endpoint = Tool.getEndpointFromNode(myNode);
         this.helloMessage = Connect.HelloMessage.newBuilder()
                 .setFrom(endpoint)
                 .setNetworkId(MyConfig.getNetwork())

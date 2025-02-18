@@ -1,5 +1,8 @@
-package myDiscover;
+package myDiscover.message;
 
+import myDiscover.MyConfig;
+import myDiscover.table.NodeId;
+import myDiscover.Tool;
 import org.tron.p2p.discover.Node;
 import org.tron.p2p.discover.message.MessageType;
 import org.tron.p2p.discover.message.kad.KadMessage;
@@ -27,6 +30,13 @@ public class MyKadPongMessage extends KadMessage {
     public MyKadPongMessage(){
         super(MessageType.KAD_PONG, (byte[])null);
         Discover.Endpoint toEndpoint = getEndpointFromNode(MyConfig.getFrom());
+        this.pongMessage = org.tron.p2p.protos.Discover.PongMessage.newBuilder().setFrom(toEndpoint).setEcho(11111).setTimestamp(System.currentTimeMillis()).build();
+        this.data = this.pongMessage.toByteArray();
+    }
+    public MyKadPongMessage(NodeId nodeId, int fromPort) {
+        super(MessageType.KAD_PONG, (byte[])null);
+        Node myNode = new Node(Tool.toPrimitive(nodeId.getNodeId()),MyConfig.getLocalIp(),"",fromPort);
+        Discover.Endpoint toEndpoint = getEndpointFromNode(myNode);
         this.pongMessage = org.tron.p2p.protos.Discover.PongMessage.newBuilder().setFrom(toEndpoint).setEcho(11111).setTimestamp(System.currentTimeMillis()).build();
         this.data = this.pongMessage.toByteArray();
     }

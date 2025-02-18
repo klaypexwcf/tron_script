@@ -1,13 +1,12 @@
 package myConnection.socket;
 
-import myDiscover.MyConfig;
-import myConnection.MyChannel;
-import myConnection.message.MyP2pDisconnectMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.CorruptedFrameException;
 import lombok.extern.slf4j.Slf4j;
+import myConnection.MyChannel;
+import myDiscover.MyConfig;
 import org.tron.p2p.protos.Connect;
 
 import java.util.List;
@@ -77,8 +76,8 @@ public class MyP2pProtobufVariant32FrameDecoder extends ByteToMessageDecoder {
             log.warn("Receive a big msg or not encoded msg, host : {}, msg length is : {}",
                     ctx.channel().remoteAddress(), length);
             in.clear();
-            channel.send(new MyP2pDisconnectMessage(Connect.DisconnectReason.BAD_MESSAGE));
-            channel.close();
+            channel.sendP2PDisconnectMsg(Connect.DisconnectReason.BAD_MESSAGE);
+            channel.close("BAD_MESSAGE");
             return;
         }
         if (preIndex == in.readerIndex()) {

@@ -6,10 +6,10 @@ import lombok.Getter;
 import myConnection.handshake.MyHandshakeService;
 import myConnection.keepalive.MyKeepAliveService;
 import myConnection.message.MyMessage;
-import myConnection.message.MyP2pDisconnectMessage;
 import myConnection.socket.MyPeerClient;
 import myConnection.socket.MyPeerServer;
 import myDiscover.MyConfig;
+import myDiscover.table.NodeIdTable;
 import myDiscover.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,8 @@ public class MyChannelManager {
 
     @Getter
     private static final Map<InetSocketAddress, MyChannel> channels = new ConcurrentHashMap<>();
-
+    @Getter
+    private static final Map<Integer,MyChannel> channelsForIncomingAttack=new ConcurrentHashMap<>();
     private static boolean isInit = false;
 
     public static volatile boolean isShutdown = false;
@@ -74,7 +75,7 @@ public class MyChannelManager {
         System.out.println("localIp:"+localIp+" remoteIp:"+remoteIp);
 
         log.info("MainClass: Starting task; for {}", remoteIp);
-        ChannelFuture channelFuture = peerClient.connectAsync(MyConfig.wrapNode(remoteIp), false);
+        ChannelFuture channelFuture = peerClient.connectAsync(MyConfig.wrapNode(remoteIp), false,null);
         //MDC.remove("customFileName");
 
 //        for (int i = 0; i < args.length; i++) {
@@ -118,6 +119,16 @@ public class MyChannelManager {
         keepAliveService.init();
 
     }
+    public static void ListeningInit(int port, int Range, NodeIdTable nodeIdTable){
+        isInit=true;
+        handshakeService=new MyHandshakeService();
+        peerClient = new MyPeerClient();
+        peerServer = new MyPeerServer();
+        keepAliveService = new MyKeepAliveService();
+        peerServer.init(port, Range,nodeIdTable);
+        peerClient.init();
+        keepAliveService.init();
+    }
 
     public static void connect(InetSocketAddress address) {
         peerClient.connect(address.getAddress().getHostAddress(), address.getPort(),
@@ -128,19 +139,30 @@ public class MyChannelManager {
         return peerClient.connect(node, future);
     }
     public static void notifyDisconnect(MyChannel channel) {
-        if (channel.getInetSocketAddress() == null) {
+        if (channel.getRemoteInetSocketAddress() == null) {
             return;
         }
-        channels.remove(channel.getInetSocketAddress());
+//        System.out.println("remove channel "+channel.getLocalPort()+" reason: "+channel.getDisconnectReason());
+//        System.out.println("channel size: "+channels.size());
+//        channels.remove(channel.getRemoteInetSocketAddress());
+        System.out.println("remove channel "+channel.getLocalPort()+" reason: "+channel.getDisconnectReason());
+        System.out.println("channel size: "+channelsForIncomingAttack.size());
+        channelsForIncomingAttack.remove(channel.getLocalPort());
+
         MyConfig.handlerList.forEach(h -> h.onDisconnect(channel));
-        InetAddress inetAddress = channel.getInetAddress();
+        InetAddress inetAddress = channel.getRemoteInetAddress();
 
     }
     public static synchronized DisconnectCode processPeer(MyChannel channel) {
 
 
-        channels.put(channel.getInetSocketAddress(), channel);
+//        channels.put(channel.getlocal(), channel);
+//        System.out.println("put channel "+channel.getLocalPort()+" to channelManager");
+//        System.out.println("channel size: "+channels.size());
 
+        channelsForIncomingAttack.put(channel.getLocalPort(), channel);
+        System.out.println("put channel "+channel.getLocalPort()+" to channelManager");
+        System.out.println("channel size: "+channelsForIncomingAttack.size());
 
         return DisconnectCode.NORMAL;
     }
@@ -156,7 +178,7 @@ public class MyChannelManager {
 
     }
     public static void processMessage(MyChannel channel, byte[] data) throws P2pException {
-        MDC.put("customFileName",channel.getInetSocketAddress().getAddress().getHostAddress());
+        MDC.put("customFileName",channel.getRemoteInetSocketAddress().getAddress().getHostAddress());
         if (data == null || data.length == 0) {
             throw new P2pException(P2pException.TypeEnum.EMPTY_MESSAGE, "");
         }
@@ -167,30 +189,31 @@ public class MyChannelManager {
 
         MyMessage message = MyMessage.parse(data);
 
-        System.out.println("receive msg from channel "+channel.getInetSocketAddress()+"type: "+message);
+        System.out.println("receive msg from channel "+channel.getRemoteInetSocketAddress()+"type: "+message);
 
 
         switch (message.getType()) {
             case KEEP_ALIVE_PING:
 
-                log.info("received KEEP_ALIVE_PING from {}",channel.getInetSocketAddress());
+                log.info("received KEEP_ALIVE_PING from {}",channel.getRemoteInetSocketAddress());
                 keepAliveService.processMessage(channel, message);
                 break;
             case KEEP_ALIVE_PONG:
-                log.info("received KEEP_ALIVE_PONG from {}",channel.getInetSocketAddress());
+                log.info("received KEEP_ALIVE_PONG from {}",channel.getRemoteInetSocketAddress());
                 keepAliveService.processMessage(channel, message);
                 break;
             case HANDSHAKE_HELLO:
-                log.info("received HANDSHAKE_HELLO from {}, {}",channel.getInetSocketAddress(), message);
+                log.info("received HANDSHAKE_HELLO from {}, {}",channel.getRemoteInetSocketAddress(), message);
                 handshakeService.processMessage(channel, message);
                 break;
             case STATUS:
-                log.info("received STATUS from {}, {}",channel.getInetSocketAddress(),message);
+                log.info("received STATUS from {}, {}",channel.getRemoteInetSocketAddress(),message);
                 //nodeDetectService.processMessage(channel, message);
                 break;
             case DISCONNECT:
-                log.info("received DISCONNECT from {}, reason: {}",channel.getInetSocketAddress(), message);
-                channel.close();
+                log.info("received DISCONNECT from {}, reason: {}",channel.getRemoteInetSocketAddress(), message);
+                channel.setDisconnectReason(message.toString());
+                channel.close(message.toString());
                 break;
             default:
                 throw new P2pException(P2pException.TypeEnum.NO_SUCH_MESSAGE, "type:" + data[0]);
@@ -199,7 +222,7 @@ public class MyChannelManager {
     private static void handMessage(MyChannel channel, byte[] data) throws P2pException {
 
         if (channel.isDiscoveryMode()) {
-            channel.send(new MyP2pDisconnectMessage(Connect.DisconnectReason.DISCOVER_MODE));
+            channel.sendP2PDisconnectMsg(Connect.DisconnectReason.DISCOVER_MODE);
             channel.getCtx().close();
             return;
         }
@@ -209,7 +232,7 @@ public class MyChannelManager {
             DisconnectCode code = processPeer(channel);
             if (!DisconnectCode.NORMAL.equals(code)) {
                 Connect.DisconnectReason disconnectReason = getDisconnectReason(code);
-                channel.send(new MyP2pDisconnectMessage(disconnectReason));
+                channel.sendP2PDisconnectMsg(disconnectReason);
                 channel.getCtx().close();
                 return;
             }
@@ -243,7 +266,7 @@ public class MyChannelManager {
         return disconnectReason;
     }
     public static synchronized void updateNodeId(MyChannel channel, String nodeId) {
-        channel.setNodeId(nodeId);
+        channel.setRemoteNodeId(nodeId);
 //        if (nodeId.equals(Hex.toHexString(MyConfig.getLocalId()))) {
 //            //log.warn("Channel {} is myself", channel.getInetSocketAddress());
 //            channel.send(new MyP2pDisconnectMessage(Connect.DisconnectReason.DUPLICATE_PEER));
@@ -277,7 +300,7 @@ public class MyChannelManager {
 //        connPoolService.triggerConnect(address);
 //    }
     public static void logDisconnectReason(MyChannel channel, Connect.DisconnectReason reason) {
-        log.info("Try to close channel: {}, reason: {}", channel.getInetSocketAddress(), reason.name());
+        log.info("Try to close channel: {}, reason: {}", channel.getRemoteInetSocketAddress(), reason.name());
 }
 
 //    public static void triggerConnect(InetSocketAddress preferInetSocketAddress) {

@@ -3,8 +3,12 @@ package myDiscover;
 import com.google.protobuf.ByteString;
 import myConnection.higher.MyHMessage.*;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.tron.core.exception.P2pException;
 import org.tron.core.net.message.MessageTypes;
+import org.tron.p2p.discover.Node;
+import org.tron.p2p.protos.Discover;
+import org.tron.p2p.utils.ByteArray;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -173,6 +177,32 @@ public class Tool {
         random.nextBytes(randomBytes);  // 生成随机字节
 
         return randomBytes;
+    }
+    public static String byteArrayToHexString(byte[] byteArray) {
+        if (byteArray == null || byteArray.length == 0) {
+            return "";
+        }
+
+        StringBuilder hexStringBuilder = new StringBuilder();
+        for (byte b : byteArray) {
+            // 格式化为两位十六进制
+            hexStringBuilder.append(String.format("%02X", b));
+        }
+        return hexStringBuilder.toString();
+    }
+    public static Discover.Endpoint getEndpointFromNode(Node node) {
+        Discover.Endpoint.Builder builder = Discover.Endpoint.newBuilder()
+                .setPort(node.getPort());
+        if (node.getId() != null) {
+            builder.setNodeId(ByteString.copyFrom(node.getId()));
+        }
+        if (StringUtils.isNotEmpty(node.getHostV4())) {
+            builder.setAddress(ByteString.copyFrom(ByteArray.fromString(node.getHostV4())));
+        }
+        if (StringUtils.isNotEmpty(node.getHostV6())) {
+            builder.setAddressIpv6(ByteString.copyFrom(ByteArray.fromString(node.getHostV6())));
+        }
+        return builder.build();
     }
 
 

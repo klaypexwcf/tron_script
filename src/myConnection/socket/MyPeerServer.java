@@ -1,6 +1,5 @@
 package myConnection.socket;
 
-import myDiscover.MyConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -9,36 +8,48 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
+import myDiscover.MyConfig;
+import myDiscover.table.NodeIdTable;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class MyPeerServer  {
-    private ChannelFuture channelFuture;
+    private Map<Integer, ChannelFuture> channelFutureList = new ConcurrentHashMap<>();
+    private Map<Integer,EventLoopGroup> bossGroupMap = new ConcurrentHashMap<>();
+    private Map<Integer,EventLoopGroup> workerGroupMap = new ConcurrentHashMap<>();
     private boolean listening;
 
-    public  void init(){
-        int port = MyConfig.getFromPort();
-        if (port >0){
-            new Thread(() -> start(port),"PeerServer").start();
+    public  void init(int startPort, int Range, NodeIdTable nodeIdTable){
+        for(int i = startPort; i<startPort+Range; i++){
+            int finalI = i;
+            int nodeSeq =i-startPort;
+            new Thread(() -> start(finalI, nodeIdTable.getNodeIdFromSeq(nodeSeq).getHexId()),"PeerServer_"+finalI).start();
         }
     }
     public void close(){
-        if (listening && channelFuture != null && channelFuture.channel().isOpen()) {
+        if (listening && channelFutureList != null ) {
             try {
-                System.out.println("Closing TCP server...");
-                channelFuture.channel().close().sync();
+                for(ChannelFuture channelFuture : channelFutureList.values()) {
+                    if(channelFuture.channel().isOpen()) {
+                        System.out.println("Closing one TCP server...");
+                        channelFuture.channel().close().sync();
+                    }
+                }
             } catch (Exception e) {
                 System.out.println("Closing TCP server failed."+e);
             }
         }
     }
-    public void start(int port) {
+    public void start(int localPort,String localNodeId) {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1,
                 new BasicThreadFactory.Builder().namingPattern("peerBoss").build());
         //if threads = 0, it is number of core * 2
         EventLoopGroup workerGroup = new NioEventLoopGroup(0,
                 new BasicThreadFactory.Builder().namingPattern("peerWorker-%d").build());
-        MyP2pChannelInitializer p2pChannelInitializer = new MyP2pChannelInitializer("", false, true,"1111test");
+        MyP2pChannelInitializer p2pChannelInitializer = new MyP2pChannelInitializer("", false, true,"1111test",localPort,localNodeId);
         try {
             ServerBootstrap b = new ServerBootstrap();
 
@@ -52,24 +63,31 @@ public class MyPeerServer  {
             b.childHandler(p2pChannelInitializer);
 
             // Start the client.
-            System.out.println("TCP listener started, bind port {}"+port);
+            System.out.println("TCP listener started, bind port "+localPort);
 
 
-            channelFuture = b.bind(port).sync();
+            ChannelFuture channelFuture = b.bind(localPort).sync();
+            channelFutureList.put(localPort, channelFuture);
+            bossGroupMap.put(localPort, bossGroup);
+            workerGroupMap.put(localPort, workerGroup);
 
             listening = true;
 
-            // Wait until the connection is closed.
-            channelFuture.channel().closeFuture().sync();
-
-            System.out.println("TCP listener closed");
-
+            new Thread(() -> {
+                try {
+                    channelFuture.channel().closeFuture().sync();
+                    System.out.println("Channel on port " + localPort + " is closed.");
+                    channelFutureList.remove(localPort);
+                    bossGroupMap.remove(localPort);
+                    workerGroupMap.remove(localPort);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    e.printStackTrace();
+                }
+            }).start();
         } catch (Exception e) {
             System.out.printf("Start TCP server failed"+ e);
-        } finally {
-            workerGroup.shutdownGracefully();
-            bossGroup.shutdownGracefully();
-            listening = false;
+            e.printStackTrace();
         }
     }
 }

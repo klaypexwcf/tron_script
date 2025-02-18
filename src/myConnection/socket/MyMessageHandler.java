@@ -1,13 +1,11 @@
 package myConnection.socket;
 
-import myConnection.MyChannel;
-import myConnection.MyChannelManager;
-import myConnection.message.MyP2pDisconnectMessage;
-import myConnection.message.MyStatusMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.extern.slf4j.Slf4j;
+import myConnection.MyChannel;
+import myConnection.MyChannelManager;
 import org.slf4j.MDC;
 import org.tron.p2p.connection.business.upgrade.UpgradeController;
 import org.tron.p2p.exception.P2pException;
@@ -18,6 +16,9 @@ import java.util.List;
 
 @Slf4j()
 public class MyMessageHandler extends ByteToMessageDecoder {
+    /**
+     * 该类的实例依附于channel存在
+     */
     private final MyChannel channel;
 
     public MyMessageHandler(MyChannel channel) {
@@ -31,14 +32,14 @@ public class MyMessageHandler extends ByteToMessageDecoder {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         MDC.put("customFileName",ctx.channel().remoteAddress().toString());
-        log.info("Channel active, {}", ctx.channel().remoteAddress());
+        log.info("Channel active, {}, local address: {}", ctx.channel().remoteAddress(), ctx.channel().localAddress().toString());
         //System.out.println("Channel active, " + ctx.channel().remoteAddress());
         channel.setChannelHandlerContext(ctx);
         if (channel.isActive()) {
             //System.out.println("Channel IS active, " + ctx.channel().remoteAddress());
             if (channel.isDiscoveryMode()) {
                 //System.out.println("\\u001B[31m Channel is discv mode, " + ctx.channel().remoteAddress()+"\\u001B[0m");
-                channel.send(new MyStatusMessage());
+                channel.sendStatusMsg();
             } else {
                 //System.out.println("Channel isn't discv mode, " + ctx.channel().remoteAddress());
                 MyChannelManager.getHandshakeService().startHandshake(channel);
@@ -79,11 +80,11 @@ public class MyMessageHandler extends ByteToMessageDecoder {
                     default:
                         disconnectReason = Connect.DisconnectReason.UNKNOWN;
                 }
-                channel.send(new MyP2pDisconnectMessage(disconnectReason));
+                channel.sendP2PDisconnectMsg(disconnectReason);
             }
             channel.processException(e);
         } catch (Throwable t) {
-            log.error("Decode message from {} failed, message:{}", channel.getInetSocketAddress(),
+            log.error("Decode message from {} failed, message:{}", channel.getRemoteInetSocketAddress(),
                     ByteArray.toHexString(data));
             throw t;
         }

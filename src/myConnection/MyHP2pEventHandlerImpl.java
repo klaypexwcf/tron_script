@@ -1,21 +1,24 @@
 package myConnection;
 
-import myDiscover.Tool;
+
+import lombok.extern.slf4j.Slf4j;
 import myConnection.higher.H_handshake.MyHHandshake;
 import myConnection.higher.H_keepalive.MyHKeepAlive;
 import myConnection.higher.MyHMessage.MyHDisconnectMessage;
 import myConnection.higher.MyHMessage.MyHHelloMessage;
 import myConnection.higher.MyHMessage.MyTronMessage;
-import lombok.extern.slf4j.Slf4j;
+import myDiscover.Tool;
 import org.tron.core.exception.P2pException;
 import org.tron.core.net.message.MessageTypes;
 import org.tron.protos.Protocol;
 
 import java.util.Set;
 
+
 @Slf4j
 public class MyHP2pEventHandlerImpl extends MyP2pEventHandler {
-    private MyHHandshake handshake;
+
+    //private MyHHandshake handshake;
     public MyHP2pEventHandlerImpl() {
         super();
     }
@@ -44,7 +47,7 @@ public class MyHP2pEventHandlerImpl extends MyP2pEventHandler {
         try {
             msg = Tool.create(data);
             type = msg.getType();
-            log.info("Receive message from peer: {}, {}", channel.getInetSocketAddress(), msg);
+            log.info("Receive message from peer: {}, {}", channel.getRemoteInetSocketAddress(), msg);
             switch (type) {
                 case P2P_PING:
                 case P2P_PONG:
@@ -54,35 +57,36 @@ public class MyHP2pEventHandlerImpl extends MyP2pEventHandler {
                     MyHHandshake.processHelloMessage(channel, (MyHHelloMessage) msg);
                     break;
                 case P2P_DISCONNECT:
-                    channel.close();
-                    log.info("received disconnect msg from channel {} with cause {}", channel.getInetSocketAddress(), ((MyHDisconnectMessage) msg).getReason());
+                    channel.setDisconnectReason(((MyHDisconnectMessage) msg).getReason().toString());
+                    channel.close(((MyHDisconnectMessage) msg).getReason().toString());
+                    log.info("received disconnect msg from channel {} with cause {}", channel.getRemoteInetSocketAddress(), ((MyHDisconnectMessage) msg).getReason());
                     break;
                 case SYNC_BLOCK_CHAIN:
-                    log.info("received SYNC_BLOCK_CHAIN from channel: {}, {}", channel.getInetSocketAddress(), msg);
+                    log.info("received SYNC_BLOCK_CHAIN from channel: {}, {}", channel.getRemoteInetSocketAddress(), msg);
                     //syncBlockChainMsgHandler.processMessage(peer, msg);
                     break;
                 case BLOCK_CHAIN_INVENTORY:
-                    log.info("received BLOCK_CHAIN_INVENTORY from channel: {}, {}", channel.getInetSocketAddress(), msg);
+                    log.info("received BLOCK_CHAIN_INVENTORY from channel: {}, {}", channel.getRemoteInetSocketAddress(), msg);
                     //chainInventoryMsgHandler.processMessage(peer, msg);
                     break;
                 case INVENTORY:
-                    log.info("received INVENTORY from channel: {}, {}", channel.getInetSocketAddress(), msg);
+                    log.info("received INVENTORY from channel: {}, {}", channel.getRemoteInetSocketAddress(), msg);
                     //inventoryMsgHandler.processMessage(peer, msg);
                     break;
                 case FETCH_INV_DATA:
-                    log.info("received FETCH_INV_DATA from channel: {}, {}", channel.getInetSocketAddress(), msg);
+                    log.info("received FETCH_INV_DATA from channel: {}, {}", channel.getRemoteInetSocketAddress(), msg);
                     //fetchInvDataMsgHandler.processMessage(peer, msg);
                     break;
                 case BLOCK:
-                    log.info("received BLOCK from channel: {}, {}", channel.getInetSocketAddress(), msg);
+                    log.info("received BLOCK from channel: {}, {}", channel.getRemoteInetSocketAddress(), msg);
                     //blockMsgHandler.processMessage(peer, msg);
                     break;
                 case TRXS:
-                    log.info("received TRXS from channel: {}, {}", channel.getInetSocketAddress(), msg);
+                    log.info("received TRXS from channel: {}, {}", channel.getRemoteInetSocketAddress(), msg);
                     //transactionsMsgHandler.processMessage(peer, msg);
                     break;
                 case PBFT_COMMIT_MSG:
-                    log.info("received PBFT_COMMIT_MSG from channel: {}, {}", channel.getInetSocketAddress(), msg);
+                    log.info("received PBFT_COMMIT_MSG from channel: {}, {}", channel.getRemoteInetSocketAddress(), msg);
                     //pbftDataSyncHandler.processMessage(peer, msg);
                     break;
                 default:
@@ -128,15 +132,15 @@ public class MyHP2pEventHandlerImpl extends MyP2pEventHandler {
             }
             if (type.equals(P2pException.TypeEnum.BAD_MESSAGE)) {
                 log.error("Message from {} process failed, {} \n type: ({})",
-                        channel.getInetSocketAddress(), msg, type, ex);
+                        channel.getRemoteInetSocketAddress(), msg, type, ex);
             } else {
                 log.warn("Message from {} process failed, {} \n type: ({}), detail: {}",
-                        channel.getInetSocketAddress(), msg, type, ex.getMessage());
+                        channel.getRemoteInetSocketAddress(), msg, type, ex.getMessage());
             }
         } else {
             code = Protocol.ReasonCode.UNKNOWN;
             log.warn("Message from {} process failed, {}",
-                    channel.getInetSocketAddress(), msg, ex);
+                    channel.getRemoteInetSocketAddress(), msg, ex);
         }
     }
 }
