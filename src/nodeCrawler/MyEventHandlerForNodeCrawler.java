@@ -3,10 +3,10 @@ package nodeCrawler;
 import lombok.Setter;
 import myDiscover.MyUdpEvent;
 import myDiscover.message.MyKadPongMessage;
-import myDiscover.message.MyNeighborsMessage;
 import myDiscover.table.NodeId;
 import org.tron.p2p.discover.message.Message;
 import org.tron.p2p.discover.message.MessageType;
+import org.tron.p2p.discover.message.kad.NeighborsMessage;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -26,7 +26,7 @@ public class MyEventHandlerForNodeCrawler {
         Message msg = myUdpEvent.getMessage();
         if (msg.getType()== MessageType.KAD_PING){
             //回复收到的Kad_ping
-            System.out.println("received msg type kad_ping"+System.currentTimeMillis());
+            System.out.println("received msg type kad_ping");
             Message pongReply=new MyKadPongMessage(localNodeId,fromPort);
             MyUdpEvent replyEvent = new MyUdpEvent(pongReply, myUdpEvent.getAddress());
             messageHandler.accept(replyEvent);
@@ -52,6 +52,6 @@ public class MyEventHandlerForNodeCrawler {
     }
 
     private int processNeighborsMsg(Message msg,Connection conn) throws SQLException {
-        return nodeCrawlerDb.nodeInfoBatchInsert((MyNeighborsMessage) msg,conn);
+        return nodeCrawlerDb.nodeInfoBatchInsert((NeighborsMessage) msg,conn);
     }
 }

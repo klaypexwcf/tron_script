@@ -21,6 +21,9 @@ public class NodeId {
 
     public byte[] getLowerBytesId(){return Tool.toPrimitive(this.nodeId);}
     public String getHexId(){return Tool.byteArrayToHexString(getLowerBytesId());}
+    public void changeIdByOneBit(){
+        nodeId[0] = (byte) (nodeId[0] ^ 1);
+    }
     @Override
     public String toString() {
         return "NodeId{" +

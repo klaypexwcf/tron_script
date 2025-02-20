@@ -9,7 +9,6 @@ import org.tron.p2p.utils.NetUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-//TODO:检查源代码
 public class MyNeighborsMessage extends KadMessage {
     private Discover.Neighbours neighbours;
 
