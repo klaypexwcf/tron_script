@@ -40,6 +40,13 @@ public class MyKadPongMessage extends KadMessage {
         this.pongMessage = org.tron.p2p.protos.Discover.PongMessage.newBuilder().setFrom(toEndpoint).setEcho(11111).setTimestamp(System.currentTimeMillis()).build();
         this.data = this.pongMessage.toByteArray();
     }
+    public MyKadPongMessage(NodeId nodeId, int fromPort,String localIp) {
+        super(MessageType.KAD_PONG, (byte[])null);
+        Node myNode = new Node(Tool.toPrimitive(nodeId.getNodeId()),localIp,"",fromPort);
+        Discover.Endpoint toEndpoint = getEndpointFromNode(myNode);
+        this.pongMessage = org.tron.p2p.protos.Discover.PongMessage.newBuilder().setFrom(toEndpoint).setEcho(11111).setTimestamp(System.currentTimeMillis()).build();
+        this.data = this.pongMessage.toByteArray();
+    }
 
     //public MyKadPongMessage(Discover.PongMessage pongMessage){}
 

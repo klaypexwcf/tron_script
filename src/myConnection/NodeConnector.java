@@ -3,9 +3,9 @@ package myConnection;
 import io.netty.channel.ChannelFuture;
 import lombok.extern.slf4j.Slf4j;
 import myDiscover.MyConfig;
+import myDiscover.Tool;
 import myDiscover.table.NodeId;
 import myDiscover.table.NodeIdTable;
-import myDiscover.Tool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class NodeConnector {
         for (int i=0; i<31;i++){
             Thread.sleep(100);
             byte[] localId=Tool.generateRandomNodeId();
-            ChannelFuture channelFuture = MyChannelManager.getPeerClient().connectAsync(MyConfig.wrapNode(toIP),false,Tool.byteArrayToHexString(localId));
+            ChannelFuture channelFuture = MyChannelManager.getPeerClient().connectAsync(MyConfig.wrapNode(toIP,0),false,Tool.byteArrayToHexString(localId));
             futureList.add(channelFuture);
         }
     }

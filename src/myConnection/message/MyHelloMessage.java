@@ -41,6 +41,19 @@ public class MyHelloMessage extends MyMessage {
                 .setTimestamp(time).build();
         this.data = helloMessage.toByteArray();
     }
+    public MyHelloMessage(DisconnectCode code, long time,String localNodeId,int localPort,String localIp) {
+        super(MessageType.HANDSHAKE_HELLO, null);
+        byte[] nodeId = Tool.hexStringToByteArray(localNodeId);
+        Node myNode = new Node(nodeId,localIp,"",localPort,localPort);
+        Discover.Endpoint endpoint = Tool.getEndpointFromNode(myNode);
+        this.helloMessage = Connect.HelloMessage.newBuilder()
+                .setFrom(endpoint)
+                .setNetworkId(11111)
+                .setCode(code.getValue())
+                .setVersion(1)
+                .setTimestamp(time).build();
+        this.data = helloMessage.toByteArray();
+    }
 
     public int getNetworkId() {
         return this.helloMessage.getNetworkId();

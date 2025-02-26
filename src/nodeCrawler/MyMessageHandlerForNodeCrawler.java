@@ -6,12 +6,13 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import lombok.extern.slf4j.Slf4j;
 import myDiscover.MyUdpEvent;
 import myDiscover.table.NodeId;
 
 import java.net.InetSocketAddress;
 import java.util.function.Consumer;
-
+@Slf4j(topic = "nodeCrawler")
 public class MyMessageHandlerForNodeCrawler extends SimpleChannelInboundHandler<MyUdpEvent> implements Consumer<MyUdpEvent> {
     private final Channel channel;
     private final MyEventHandlerForNodeCrawler myEventHandler;
@@ -45,17 +46,20 @@ public class MyMessageHandlerForNodeCrawler extends SimpleChannelInboundHandler<
                 ", len " + myUdpEvent.getMessage().getSendData().length +
                 " to " + myUdpEvent.getAddress());
         InetSocketAddress address = myUdpEvent.getAddress();
+        //System.out.println("msg: "+ myUdpEvent.getMessage().toString());
         sendPacket(myUdpEvent.getMessage().getSendData(), address);
     }
 
     void sendPacket(byte[] wire, InetSocketAddress address) {
         DatagramPacket packet = new DatagramPacket(Unpooled.copiedBuffer(wire), address);
+        //System.out.println("wire: "+ Arrays.toString(wire));
         channel.writeAndFlush(packet).addListener(future -> {
             if (future.isSuccess()) {
-                System.out.println("send success");
+                log.debug("send packet success");
             }
             else {
-                System.out.println("send failed");
+                Throwable cause = future.cause();
+                log.debug("send packet failed: ", cause);
             }
         });
 
@@ -69,6 +73,7 @@ public class MyMessageHandlerForNodeCrawler extends SimpleChannelInboundHandler<
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         System.err.println("Exception caught in udp message handler, " + ctx.channel().remoteAddress() + " " + cause.getMessage());
+        log.error("Exception caught in udp message handler {}",ctx.channel().remoteAddress(), cause);
         ctx.close();
     }
 }

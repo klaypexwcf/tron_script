@@ -22,6 +22,6 @@ public class simpleConnector {
         MyConfig.setLocalIp(localIp);
         MyConfig.setToIp(remoteIp);
         MyConfig.init();
-        ChannelFuture channelFuture = MyChannelManager.getPeerClient().connectAsync(MyConfig.wrapNode(remoteIp), false,null);
+        ChannelFuture channelFuture = MyChannelManager.getPeerClient().connectAsync(MyConfig.wrapNode(remoteIp,0), false,null);
     }
 }

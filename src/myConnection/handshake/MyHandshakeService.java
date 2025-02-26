@@ -12,9 +12,17 @@ import org.tron.p2p.protos.Connect;
 import static org.tron.p2p.connection.ChannelManager.getDisconnectReason;
 
 public class MyHandshakeService implements MessageProcess {
-    private final int networkId = MyConfig.getNetwork();
+    private int networkId = MyConfig.getNetwork();
+
+    public MyHandshakeService(int networkId) {
+        this.networkId =networkId;
+    }
+
+    public MyHandshakeService() {
+    }
 
     public void startHandshake(MyChannel channel) {
+        System.out.println("start handshake for " + channel.getRemoteIp());
         sendHelloMsg(channel, DisconnectCode.NORMAL, channel.getStartTime(),channel.getLocalPort(),channel.getLocalNodeId());
     }
 
@@ -72,7 +80,7 @@ public class MyHandshakeService implements MessageProcess {
         MyConfig.hp2pEventHandler.onConnect(channel);
     }
 
-    private void sendHelloMsg(MyChannel channel, DisconnectCode code, long time,int localPort,String localNodeId) {
+    protected void sendHelloMsg(MyChannel channel, DisconnectCode code, long time,int localPort,String localNodeId) {
         MyHelloMessage helloMessage = new MyHelloMessage(code, time,localPort,localNodeId);
         channel.send(helloMessage);
     }

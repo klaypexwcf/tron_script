@@ -45,10 +45,12 @@ public class MyChannelManager {
     private static final Map<InetSocketAddress, MyChannel> channels = new ConcurrentHashMap<>();
     @Getter
     private static final Map<Integer,MyChannel> channelsForIncomingAttack=new ConcurrentHashMap<>();
+    @Getter
     private static boolean isInit = false;
 
     public static volatile boolean isShutdown = false;
 
+    public static boolean isConnectionTest = false;
 
     public static void main(String[] args) {
         String localIdString;
@@ -75,7 +77,7 @@ public class MyChannelManager {
         System.out.println("localIp:"+localIp+" remoteIp:"+remoteIp);
 
         log.info("MainClass: Starting task; for {}", remoteIp);
-        ChannelFuture channelFuture = peerClient.connectAsync(MyConfig.wrapNode(remoteIp), false,null);
+        ChannelFuture channelFuture = peerClient.connectAsync(MyConfig.wrapNode(remoteIp,0), false,null);
         //MDC.remove("customFileName");
 
 //        for (int i = 0; i < args.length; i++) {

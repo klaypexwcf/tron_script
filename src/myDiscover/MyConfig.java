@@ -131,8 +131,14 @@ public class  MyConfig {
     public static void setToIp(String toIp){
         to = new Node(remoteId,toIp,"",toPort);
     }
-    public static Node wrapNode(String ip){
-        return new Node(remoteId,ip,"",toPort);
+    public static Node wrapNode(String ip,int port){
+
+        if (port ==0) {
+            return new Node(remoteId,ip,"",toPort);
+        }
+        else {
+            return new Node(remoteId,ip,"",port);
+        }
     }
     public static void addP2pEventHandler(MyP2pEventHandler p2pEventHandler) throws P2pException {
         if (p2pEventHandler.getMessageTypes() != null) {

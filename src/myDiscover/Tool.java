@@ -10,6 +10,8 @@ import org.tron.p2p.discover.Node;
 import org.tron.p2p.protos.Discover;
 import org.tron.p2p.utils.ByteArray;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -204,7 +206,13 @@ public class Tool {
         }
         return builder.build();
     }
-
-
+    public static Node wrapNode(String localIP,int localPort,byte[] localId){
+        return new Node(localId,localIP,"",localPort);
+    }
+    public static int getAvailablePort() throws IOException {
+        try (ServerSocket socket = new ServerSocket(0)) { // 0 表示让系统分配一个空闲端口
+            return socket.getLocalPort();
+        }
+    }
 }
 

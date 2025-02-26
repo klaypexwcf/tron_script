@@ -18,6 +18,9 @@ import myConnection.higher.MyHMessage.MyHHelloMessage;
 import myConnection.message.*;
 import myConnection.socket.MyMessageHandler;
 import myConnection.socket.MyP2pProtobufVariant32FrameDecoder;
+import nodeCrawler.NodeCrawler;
+import nodeCrawler.NodeTestConnection.MyHandshakeServiceForNodeTestConnection;
+import nodeCrawler.NodeTestConnection.MyMessageHandlerForNodeTestConnection;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.tron.p2p.connection.business.upgrade.UpgradeController;
@@ -52,9 +55,9 @@ public class MyChannel {
     @Getter
     private int version;
     @Getter
-    private int localPort;
+    protected int localPort;
     @Getter
-    private String localNodeId;
+    protected String localNodeId;
     @Getter
     private ChannelHandlerContext ctx;
     @Getter
@@ -75,7 +78,7 @@ public class MyChannel {
     @Getter
     private final long startTime = System.currentTimeMillis();
     @Getter
-    private boolean isActive = false;
+    protected boolean isActive = false;
     @Getter
     private boolean isTrustPeer;
     @Getter
@@ -90,14 +93,32 @@ public class MyChannel {
     @Getter
     private long avgLatency;
     private long count;
+    @Getter
+    protected String remoteIp;
 
-    public void init(ChannelPipeline pipeline, String remoteNodeId, boolean discoveryMode,int localPort,String localNodeId) {
+    public void init(ChannelPipeline pipeline, String remoteNodeId, boolean discoveryMode, int localPort, String localNodeId) {
         this.localNodeId = localNodeId;
         this.localPort = localPort;
         this.discoveryMode = discoveryMode;
         this.remoteNodeId = remoteNodeId;
         this.isActive = StringUtils.isNotEmpty(remoteNodeId);
         MyMessageHandler messageHandler = new MyMessageHandler(this);
+        pipeline.addLast("readTimeoutHandler", new ReadTimeoutHandler(60, TimeUnit.SECONDS));
+        pipeline.addLast(TrafficStats.tcp);
+        pipeline.addLast("protoPrepend", new ProtobufVarint32LengthFieldPrepender());
+        pipeline.addLast("protoDecode", new MyP2pProtobufVariant32FrameDecoder(this));
+        pipeline.addLast("messageHandler", messageHandler);
+    }
+    public void initForTestConnection(ChannelPipeline pipeline, String remoteNodeId, boolean discoveryMode, int localPort, String localNodeId,String remoteIp) {
+        this.localNodeId = localNodeId;
+        this.localPort = localPort;
+        this.discoveryMode = discoveryMode;
+        this.remoteNodeId = remoteNodeId;
+        this.isActive = StringUtils.isNotEmpty(remoteNodeId);
+        this.remoteIp = remoteIp;
+        MyHandshakeServiceForNodeTestConnection myHandshakeServiceForNodeTestConnection =new MyHandshakeServiceForNodeTestConnection();
+        myHandshakeServiceForNodeTestConnection.setLocalIp(NodeCrawler.localIp);
+        MyMessageHandlerForNodeTestConnection messageHandler = new MyMessageHandlerForNodeTestConnection(this, myHandshakeServiceForNodeTestConnection);
         pipeline.addLast("readTimeoutHandler", new ReadTimeoutHandler(60, TimeUnit.SECONDS));
         pipeline.addLast(TrafficStats.tcp);
         pipeline.addLast("protoPrepend", new ProtobufVarint32LengthFieldPrepender());

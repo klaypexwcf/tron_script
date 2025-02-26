@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import myConnection.MyChannelManager;
 import myDiscover.MyConfig;
 import myDiscover.Tool;
+import nodeCrawler.NodeTestConnection.MyP2pChannelInitializerForNodeTestConnection;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.bouncycastle.util.encoders.Hex;
 import org.slf4j.MDC;
@@ -28,6 +29,7 @@ public class MyPeerClient {
     public void close() {
         workerGroup.shutdownGracefully();
         workerGroup.terminationFuture().syncUninterruptibly();
+        System.out.println("peer client closed");
     }
 
     public void connect(String host, int port, String remoteId) {
@@ -152,5 +154,30 @@ public class MyPeerClient {
         Random random = new Random();
         return new MyP2pChannelInitializer(remoteId,
                 discoveryMode, trigger, host,MyConfig.getFromPort()+random.nextInt(300), localId);
+    }
+
+    public ChannelFuture testConnection(Node remoteNode,String localIp,int localPort,String localIdHex) {
+        Bootstrap b = null;
+        try {
+            MyP2pChannelInitializerForNodeTestConnection p2pChannelInitializer=
+                    new MyP2pChannelInitializerForNodeTestConnection(remoteNode.getHexId(),localPort,localIdHex, remoteNode.getHostV4());
+            b = new Bootstrap();
+            b.group(workerGroup);
+            b.channel(NioSocketChannel.class);
+            b.option(ChannelOption.SO_KEEPALIVE, true);
+            b.option(ChannelOption.MESSAGE_SIZE_ESTIMATOR, DefaultMessageSizeEstimator.DEFAULT);
+            b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2000);
+            b.remoteAddress(remoteNode.getHostV4(), remoteNode.getPort());
+            b.handler(p2pChannelInitializer);
+            //b.localAddress(MyConfig.getLocalIp(),);
+            b.bind(localPort);
+            //b.connect();
+        } catch (Exception e) {
+            System.out.println("exception caught " + e);
+            log.error("exception caught ",e);
+            throw new RuntimeException(e);
+        }
+        //System.out.println("bootstrap configured, connect now. ip "+remoteNode.getHostV4());
+        return b.connect();
     }
 }

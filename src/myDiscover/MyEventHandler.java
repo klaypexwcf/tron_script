@@ -10,6 +10,9 @@ public class MyEventHandler {
 
     private MyMessageHandler messageHandler;
 
+    public MyEventHandler() {
+    }
+
     public MyEventHandler(MyMessageHandler messageHandler) {
         this.messageHandler = messageHandler;
     }

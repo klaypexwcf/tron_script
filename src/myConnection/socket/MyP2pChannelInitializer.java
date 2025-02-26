@@ -1,15 +1,14 @@
 package myConnection.socket;
 
-import io.netty.util.AttributeKey;
-import myConnection.MyChannel;
-import myConnection.MyChannelManager;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
+import myConnection.MyChannel;
+import myConnection.MyChannelManager;
 
 @Slf4j
 public class MyP2pChannelInitializer extends ChannelInitializer<NioSocketChannel> {
@@ -17,9 +16,8 @@ public class MyP2pChannelInitializer extends ChannelInitializer<NioSocketChannel
 
     private boolean peerDiscoveryMode = false; //only be true when channel is activated by detect service
 
-    private boolean trigger = true;
+    private boolean trigger;
 
-    private final String remoteAddress;
     private final int localPort;
     private final String localNodeId;
     private String disconnectReason="";
@@ -30,14 +28,13 @@ public class MyP2pChannelInitializer extends ChannelInitializer<NioSocketChannel
         this.remoteId = remoteId;
         this.peerDiscoveryMode = peerDiscoveryMode;
         this.trigger = trigger;
-        this.remoteAddress = justAnUnusedVariable;
     }
 
     @Override
     public void initChannel(NioSocketChannel ch) {
         try {
-            MDC.put("customFileName", remoteAddress);
-            System.out.println(MDC.get("customFileName"));
+//            MDC.put("customFileName", remoteAddress);
+//            System.out.println(MDC.get("customFileName"));
             final MyChannel channel = new MyChannel();
             channel.init(ch.pipeline(), remoteId, peerDiscoveryMode,localPort,localNodeId);
 

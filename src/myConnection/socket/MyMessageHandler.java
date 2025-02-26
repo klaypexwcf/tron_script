@@ -19,7 +19,7 @@ public class MyMessageHandler extends ByteToMessageDecoder {
     /**
      * 该类的实例依附于channel存在
      */
-    private final MyChannel channel;
+    protected final MyChannel channel;
 
     public MyMessageHandler(MyChannel channel) {
         this.channel = channel;
@@ -42,7 +42,9 @@ public class MyMessageHandler extends ByteToMessageDecoder {
                 channel.sendStatusMsg();
             } else {
                 //System.out.println("Channel isn't discv mode, " + ctx.channel().remoteAddress());
-                MyChannelManager.getHandshakeService().startHandshake(channel);
+                if (MyChannelManager.isInit()) {
+                    MyChannelManager.getHandshakeService().startHandshake(channel);
+                }
             }
         }
         //MDC.remove("customFileName");
@@ -56,7 +58,7 @@ public class MyMessageHandler extends ByteToMessageDecoder {
             if (channel.isFinishHandshake()) {
                 data = UpgradeController.decodeReceiveData(channel.getVersion(), data);
             }
-            MyChannelManager.processMessage(channel, data);
+        MyChannelManager.processMessage(channel, data);
         } catch (Exception e) {
             if (e instanceof P2pException) {
                 P2pException pe = (P2pException) e;

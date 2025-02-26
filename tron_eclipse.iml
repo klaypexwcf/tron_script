@@ -40,5 +40,6 @@
     <orderEntry type="library" name="protocol-1.0.0" level="project" />
     <orderEntry type="library" name="spring-core-5.3.18" level="project" />
     <orderEntry type="library" name="mysql.connector.java" level="project" />
+    <orderEntry type="library" name="google.code.gson" level="project" />
   </component>
 </module>

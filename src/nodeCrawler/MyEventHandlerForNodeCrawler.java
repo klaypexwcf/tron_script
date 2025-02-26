@@ -15,7 +15,11 @@ public class MyEventHandlerForNodeCrawler {
     @Setter
     private MyMessageHandlerForNodeCrawler messageHandler;
     private final NodeCrawlerDb nodeCrawlerDb=new NodeCrawlerDb();
-    private final Connection conn= nodeCrawlerDb.getConnection();
+    private final Connection conn= getConnection();
+
+    private Connection getConnection() throws SQLException {
+        return nodeCrawlerDb.getConnection();
+    }
 
     public MyEventHandlerForNodeCrawler(MyMessageHandlerForNodeCrawler messageHandler) throws SQLException {
         this.messageHandler = messageHandler;
@@ -27,7 +31,7 @@ public class MyEventHandlerForNodeCrawler {
         if (msg.getType()== MessageType.KAD_PING){
             //回复收到的Kad_ping
             System.out.println("received msg type kad_ping");
-            Message pongReply=new MyKadPongMessage(localNodeId,fromPort);
+            Message pongReply=new MyKadPongMessage(localNodeId,fromPort,NodeCrawler.publicLocalIp);
             MyUdpEvent replyEvent = new MyUdpEvent(pongReply, myUdpEvent.getAddress());
             messageHandler.accept(replyEvent);
         }
@@ -39,7 +43,7 @@ public class MyEventHandlerForNodeCrawler {
             System.out.println("received msg type kad_neighbors from "+myUdpEvent.getAddress());
             try {
                 int num = processNeighborsMsg(msg,conn);
-                System.out.println("insert "+num+" nodes info");
+                System.out.println("update "+num+" nodes info");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

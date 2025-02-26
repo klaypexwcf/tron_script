@@ -1,0 +1,45 @@
+<configuration>
+
+    <!-- 设置日志文件的存储路径和文件名 -->
+    <property name="LOG_DIR" value="./logs" />
+    <property name="LOG_FILE" value="node crawler.log" />
+
+    <!-- Console Appender（控制台输出） -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%logger{36}] %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Rolling File Appender（滚动日志文件） -->
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${LOG_FILE}</file>
+
+        <!-- 滚动策略（按大小或日期切割日志） -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 每天生成一个新日志文件，保留300天 -->
+            <fileNamePattern>${LOG_DIR}/${LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>300</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%logger{36}] %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 针对 `node online updater` 这个 Logger 的配置 -->
+    <logger name="nodeOnlineUpdater" level="info" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ROLLING"/>
+    </logger>
+    <logger name="nodeCrawler" level="info" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ROLLING"/>
+    </logger>
+
+    <!-- Root Logger（默认日志配置） -->
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
