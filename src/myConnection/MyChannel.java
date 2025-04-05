@@ -167,7 +167,7 @@ public class MyChannel {
         this.disconnectTime = System.currentTimeMillis();
         disconnectReason =reason;
         ctx.attr(DISCONNECT_REASON_KEY).set(disconnectReason);
-        System.out.println("channel "+ localPort+ " closed because "+reason);
+        //System.out.println("channel "+ localPort+ " closed because "+reason);
         //MyChannelManager.banNode(this.remoteInetAddress, banTime);
         ctx.close();
     }

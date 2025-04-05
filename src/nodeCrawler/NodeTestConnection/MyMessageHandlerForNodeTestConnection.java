@@ -25,7 +25,7 @@ public class MyMessageHandlerForNodeTestConnection extends MyMessageHandler {
     }
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        System.out.println("channelActive for "+ctx.channel().remoteAddress());
+        //System.out.println("channelActive for "+ctx.channel().remoteAddress());
         channel.setChannelHandlerContext(ctx);
         if(channel.isActive()){
             myHandshakeServiceForNodeTestConnection.startHandshake(channel);

@@ -1,12 +1,13 @@
 Manifest-Version: 1.0
 Main-Class: nodeCrawler.NodeCrawler
-Class-Path: logback-classic-1.2.9.jar bcprov-jdk15on-1.69.jar common-1.0
- .0.jar netty-common-4.1.79.Final.jar commons-lang3-3.16.0.jar netty-cod
- ec-4.1.79.Final.jar json-20231013.jar logback-core-1.2.9.jar snappy-jav
- a-1.1.10.5.jar libp2p-2.2.1.jar guava-31.1-android.jar netty-handler-4.
- 1.79.Final.jar slf4j-api-1.7.36.jar spring-core-5.3.18.jar netty-buffer
- -4.1.79.Final.jar protobuf-java-3.21.12.jar protocol-1.0.0.jar mysql-co
- nnector-java-8.0.30.jar protobuf-java-3.19.4.jar netty-transport-4.1.79
- .Final.jar netty-resolver-4.1.79.Final.jar protocol-core-2.18.41.jar lo
- mbok-1.18.24.jar chainbase-1.0.0.jar
+Class-Path: bcprov-jdk15on-1.69.jar common-1.0.0.jar netty-handler-4.1.7
+ 9.Final.jar logback-classic-1.2.9.jar mysql-connector-java-8.0.30.jar p
+ rotobuf-java-3.19.4.jar protocol-1.0.0.jar protobuf-java-3.21.12.jar pr
+ otocol-core-2.18.41.jar chainbase-1.0.0.jar netty-buffer-4.1.79.Final.j
+ ar gson-2.12.1.jar error_prone_annotations-2.36.0.jar logback-core-1.2.
+ 9.jar spring-core-5.3.18.jar netty-resolver-4.1.79.Final.jar json-20231
+ 013.jar slf4j-api-1.7.36.jar libp2p-2.2.1.jar netty-transport-4.1.79.Fi
+ nal.jar netty-codec-4.1.79.Final.jar commons-lang3-3.16.0.jar lombok-1.
+ 18.24.jar snappy-java-1.1.10.5.jar guava-31.1-android.jar netty-common-
+ 4.1.79.Final.jar
 

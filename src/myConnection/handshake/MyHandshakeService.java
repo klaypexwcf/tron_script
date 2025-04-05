@@ -22,7 +22,7 @@ public class MyHandshakeService implements MessageProcess {
     }
 
     public void startHandshake(MyChannel channel) {
-        System.out.println("start handshake for " + channel.getRemoteIp());
+        //System.out.println("start handshake for " + channel.getRemoteIp());
         sendHelloMsg(channel, DisconnectCode.NORMAL, channel.getStartTime(),channel.getLocalPort(),channel.getLocalNodeId());
     }
 

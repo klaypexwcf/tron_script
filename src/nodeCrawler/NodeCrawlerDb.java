@@ -1,7 +1,10 @@
 package nodeCrawler;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import myDiscover.Tool;
 import myDiscover.table.NodeId;
+import nodeCrawler.NodeTestConnection.NodeOnlineUpdater;
 import org.tron.p2p.discover.Node;
 import org.tron.p2p.discover.message.kad.NeighborsMessage;
 
@@ -9,75 +12,118 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+@Slf4j
 public class NodeCrawlerDb {
     private static final LocalDate START_DATE = LocalDate.of(2025, 1, 1);
-    private static final int TOTAL_YEARS = 100; // 你可以根据存储大小调整
-
-    private static int calculateTotalDays() {
-        int days = 0;
-        for (int i = 0; i < TOTAL_YEARS; i++) {
-            int year = START_DATE.getYear() + i;
-            days += LocalDate.of(year, 12, 31).getDayOfYear(); // 获取该年的总天数
-        }
-        return days;
-    }
-
+    //private static final int TOTAL_YEARS = 100; // 你可以根据存储大小调整
+    public static final int LENGTH_OF_MYSQL_BLOB = 16384;
     public String database = "tron";
-    public String url = "jdbc:mysql://81.70.23.5:3306/"+database;
+    public String url = "jdbc:mysql://81.70.23.5:3306/"+database+"?connectTimeout=5000";
     public String user = "tron";
     public String password = "Wcf314159";
-    public String tableName = "tron_nodes";
-    public String onlineNodesTableNodes = "online_nodes";
+    public String publicNodesTableName = "public_nodes_test";
+    public String publicOnlineNodesTableName = "public_online_nodes_test";
+    public String tronscanNodesTableName = "tronscan_nodes";
+    public int queryTronscanNodesBatchSize = 40;
     public int dbOldCursorLineNUm = 0;
     public int dbCurrentCursorLineNum = 0;
 
     public static int MAX_SEND_BATCH_SIZE = 15;
-    public String sizeQuery = "select count(*) from " + tableName;
-    public String singleDataQueryByCreateTimeOrder = "select * from " + tableName + " ORDER BY create_time LIMIT 1 OFFSET ";
-    public String queryByPriKey = "select * from " + tableName + " WHERE ipv4 = ? AND nodeID = ? ";
-    public String clearTable = "TRUNCATE TABLE "+onlineNodesTableNodes;
-    public String insertForTable1 = "INSERT INTO " + tableName + " (ipv4, ipv6, tcpPort, udpPort, nodeId, " +
+    public String commonSizeQuery = "select count(*) from " + publicNodesTableName;
+    public String singlePublicNodesQueryByCreateTimeOrder = "select * from " + publicNodesTableName + " ORDER BY create_time LIMIT 1 OFFSET ";
+    public String batchPublicNodesQueryByCreateTimeOrder = "select * from " + publicNodesTableName + " ORDER BY create_time LIMIT "+ NodeOnlineUpdater.QUERY_BATCH_SIZE +" OFFSET ";
+    public String queryByPriKey = "select * from " + publicNodesTableName + " WHERE ipv4 = ? AND udpPort = ? AND tcpPort = ?";
+    public String trimPublicOnlineTable = "DELETE FROM "+publicOnlineNodesTableName +" WHERE lastOnlineDetect < NOW() - INTERVAL 4 HOUR;";
+    public String updateLastOnlineDetectInPublicNodes = "update "+publicNodesTableName+" set lastOnlineDetect = ? where ipv4 = ? and tcpPort = ? and udpPort = ?";
+    public String insertPublicNodesTable = "INSERT INTO " + publicNodesTableName + " (ipv4, ipv6, tcpPort, udpPort, nodeId, " +
             "walletName, activeConnNum, passiveConnNum, codeVersion, configActiveNodeSize, configMaxConnections, " +
             "configPassiveNodeSize, sameIpMaxConnections, seedNodesSize, supportConstant, versionNum, " +
-            "javaVersion, cpuCount, osName, online_days, online_time) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+            "javaVersion, cpuCount, osName, online_days, online_time, lastOnlineDetect) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
             "ON DUPLICATE KEY UPDATE " +
-            "ipv6 = VALUES(ipv6), tcpPort = VALUES(tcpPort), udpPort = VALUES(udpPort), " +
+            "ipv6 = VALUES(ipv6), nodeId = VALUES(nodeId), " +
             "walletName = VALUES(walletName), activeConnNum = VALUES(activeConnNum), " +
             "passiveConnNum = VALUES(passiveConnNum), codeVersion = VALUES(codeVersion), " +
             "configActiveNodeSize = VALUES(configActiveNodeSize), configMaxConnections = VALUES(configMaxConnections), " +
             "configPassiveNodeSize = VALUES(configPassiveNodeSize), sameIpMaxConnections = VALUES(sameIpMaxConnections), " +
             "seedNodesSize = VALUES(seedNodesSize), supportConstant = VALUES(supportConstant), versionNum = VALUES(versionNum), " +
             "javaVersion = VALUES(javaVersion), cpuCount = VALUES(cpuCount), osName = VALUES(osName), online_days = VALUES(online_days), " +
-            "online_time = VALUES(online_time);";
+            "online_time = VALUES(online_time),lastOnlineDetect = VALUES(lastOnlineDetect);";
 
-    public String insertForTable2 = "INSERT INTO " + onlineNodesTableNodes + " (ipv4, ipv6, tcpPort, udpPort, nodeId, " +
+    public String insertPublicOnlineNodesTable = "INSERT INTO " + publicOnlineNodesTableName + " (ipv4, ipv6, tcpPort, udpPort, nodeId, " +
             "walletName, activeConnNum, passiveConnNum, codeVersion, configActiveNodeSize, configMaxConnections, " +
             "configPassiveNodeSize, sameIpMaxConnections, seedNodesSize, supportConstant, versionNum, " +
-            "javaVersion, cpuCount, osName, online_days, online_time) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+            "javaVersion, cpuCount, osName, online_days, online_time, lastOnlineDetect) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
             "ON DUPLICATE KEY UPDATE " +
-            "ipv6 = VALUES(ipv6), tcpPort = VALUES(tcpPort), udpPort = VALUES(udpPort), " +
+            "ipv6 = VALUES(ipv6), nodeId = VALUES(nodeId), " +
             "walletName = VALUES(walletName), activeConnNum = VALUES(activeConnNum), " +
             "passiveConnNum = VALUES(passiveConnNum), codeVersion = VALUES(codeVersion), " +
             "configActiveNodeSize = VALUES(configActiveNodeSize), configMaxConnections = VALUES(configMaxConnections), " +
             "configPassiveNodeSize = VALUES(configPassiveNodeSize), sameIpMaxConnections = VALUES(sameIpMaxConnections), " +
             "seedNodesSize = VALUES(seedNodesSize), supportConstant = VALUES(supportConstant), versionNum = VALUES(versionNum), " +
             "javaVersion = VALUES(javaVersion), cpuCount = VALUES(cpuCount), osName = VALUES(osName), online_days = VALUES(online_days), " +
-            "online_time = VALUES(online_time);";
+            "online_time = VALUES(online_time), lastOnlineDetect = VALUES(lastOnlineDetect);";
 
+    public String tronscanNodesQuery = "select * from "+ tronscanNodesTableName +" ORDER BY create_time LIMIT "+queryTronscanNodesBatchSize+" OFFSET ";
+    public String tronscanNodesSizeQuery = "select count(*) from "+ tronscanNodesTableName;
+    public String updateOneNodeInTronscanNodesTable1 = "UPDATE " + tronscanNodesTableName +" SET is_online = 1 WHERE ipv4 = ?";
+    public String updateOneNodeInTronscanNodesTable2 = "UPDATE " + tronscanNodesTableName +" SET is_online = 0 WHERE ipv4 = ?";
+    public String toggleTableStatus = "UPDATE table_status SET status = ? WHERE table_name = ? AND status = ?";
+    public enum TableStatus {
+        ONLINE("online"),
+        OFFLINE("offline"),
+        UPDATING("updating");
+        @Getter
+        private final String value;
+        private TableStatus(String value) {
+            this.value = value;
+        }
+    }
     public NodeCrawlerDb() {
     }
 
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() {
         Connection conn;
-        conn = DriverManager.getConnection(url, user, password);
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            System.out.println("failed to get connection "+e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         return conn;
     }
-    public void clearTable(Connection conn) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement(clearTable);
-        ps.executeUpdate();
+    public boolean toggleTableStatus(Connection conn,String tableName,String oldStatus,String newStatus) throws SQLException{
+        PreparedStatement ps=conn.prepareStatement(toggleTableStatus);
+        ps.setString(1, newStatus);
+        ps.setString(2, tableName);
+        ps.setString(3, oldStatus);
+        int count = ps.executeUpdate();
+        if (count == 1) {
+            log.info("toggle {} status from {} to {} succeeded",tableName,oldStatus,newStatus);
+            return true;
+        }
+        else {
+            log.info("toggle {} status from {} to {} failed",tableName,oldStatus,newStatus);
+            return false;
+        }
+
+    }
+    public int toggleOnlineByIp(Connection conn, String ip, String sql) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, ip);
+        int rs = ps.executeUpdate();
+        ps.close();
+        return rs;
+    }
+    public void trimPublicOnlineTable(Connection conn) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(trimPublicOnlineTable);
+        int count=  ps.executeUpdate();
+        log.info("public online table trimmed, affected {} rows", count);
         ps.close();
     }
 
@@ -86,21 +132,24 @@ public class NodeCrawlerDb {
         dbCurrentCursorLineNum = 0;
     }
     public int getTableSize(Connection conn) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement(sizeQuery);
+        PreparedStatement ps = conn.prepareStatement(commonSizeQuery);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             int tmp = rs.getInt(1);
             rs.close();
+            ps.close();
             return tmp;
         }
         else{
             System.out.println("get table size failed");
             rs.close();
+            ps.close();
             return 0;
         }
     }
     public void updateTableSize(Connection conn) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement(sizeQuery);
+        PreparedStatement ps;
+        ps = conn.prepareStatement(commonSizeQuery);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             dbOldCursorLineNUm = dbCurrentCursorLineNum;
@@ -115,35 +164,46 @@ public class NodeCrawlerDb {
         }
         ps.close();
     }
-    public void insertOneLineToOnlineTable(MyNodeInfoUtil nodeInfo,Connection conn) throws SQLException {
-        updateOrInsertOneLineInTable(nodeInfo, conn, insertForTable2);
+    public void insertOrUpdateOneRowToPublicOnlineTable(MyNodeInfoUtil newNodeInfo, Connection conn,String ipv4,int tcpPort,int udpPort) throws SQLException {
+        updateOrInsertOneRowInTable(newNodeInfo, conn, insertPublicOnlineNodesTable,ipv4,tcpPort,udpPort);
+        System.out.println("insert one row into public online nodes table");
     }
-    public void updateOneLineToOriTable(MyNodeInfoUtil nodeInfo,Connection conn) throws SQLException {
-        updateOrInsertOneLineInTable(nodeInfo, conn, insertForTable1);
+    public void updateOneLineToOriTable(MyNodeInfoUtil newNodeInfo,Connection conn,String ipv4,int tcpPort,int udpPort) throws SQLException {
+        updateOrInsertOneRowInTable(newNodeInfo, conn, insertPublicNodesTable,ipv4,tcpPort,udpPort);
+        System.out.println("update one row in public nodes table");
     }
 
-    private void updateOrInsertOneLineInTable(MyNodeInfoUtil nodeInfo, Connection conn, String mysqlStatement) throws SQLException {
-        //System.out.println("entering method  updateOrInsertOneLineInTable");
+    private void updateOrInsertOneRowInTable(MyNodeInfoUtil newNodeInfo, Connection conn, String mysqlStatement, String ipv4, int tcpPort, int udpPort) throws SQLException {
+        //System.out.println("entering method updateOrInsertOneRowInTable");
         conn.setAutoCommit(true);
         PreparedStatement stmt = conn.prepareStatement(mysqlStatement);
-        stmt.setString(1, nodeInfo.ipv4);
-        stmt.setString(2,nodeInfo.ipv6);
-        stmt.setInt(3,nodeInfo.tcpPort);
-        stmt.setInt(4, nodeInfo.udpPort);
-        stmt.setBytes(5, nodeInfo.nodeId.getLowerBytesId());
-        setRpcInfo(nodeInfo, stmt);
-        byte[] tmp =new byte[255];
-        if (nodeInfo.online_days!=null){
-            tmp = nodeInfo.online_days;
-        }
+        stmt.setString(1, ipv4);
+        stmt.setString(2,newNodeInfo.ipv6);
+        stmt.setInt(3,tcpPort);
+        stmt.setInt(4, udpPort);
+        stmt.setBytes(5, newNodeInfo.getNodeId().getLowerBytesId());
+        setRpcInfo(newNodeInfo, stmt);
+        byte[] tmp = Arrays.copyOf(newNodeInfo.online_days,newNodeInfo.online_days.length);
+        System.out.println("tmp for node :"+newNodeInfo.ipv4+" :"+ Arrays.toString(tmp));
         //System.out.println("setRpcInfo finished");
-        updateOnlineIntervals(tmp);
+        boolean isEdit =updateOnlineIntervals(tmp);
         //System.out.println("getting updated online_days succeed");
         stmt.setBytes(20,tmp);
-        stmt.setInt(21,nodeInfo.getOnline_time()+1);
+        if (isEdit) {
+            System.out.println("----------------------");
+            System.out.println("add 1 to online_time "+newNodeInfo.ipv4+", now "+(newNodeInfo.getOnline_time()+1)+", old "+newNodeInfo.getOnline_time());
+            stmt.setInt(21,newNodeInfo.getOnline_time()+1);
+        }
+        else {
+            System.out.println("///////////////////");
+            System.out.println("online_time is already set online");
+            stmt.setInt(21,newNodeInfo.getOnline_time());
+        }
+        //更新探测时间戳
+        stmt.setTimestamp(22,new Timestamp(System.currentTimeMillis()));
         //System.out.println("ready to insert");
         stmt.executeUpdate();
-        int affectedRows = stmt.executeUpdate();
+        //int affectedRows = stmt.executeUpdate();
         //System.out.println("rows affected: " + affectedRows);
         stmt.close();
     }
@@ -165,22 +225,28 @@ public class NodeCrawlerDb {
         stmt.setString(19, nodeInfo.getOsName());
     }
 
-    public static void updateOnlineIntervals(byte[] onlineIntervals) {
+    /**
+     * 检查对应时间段值，将其设为1
+     * @param onlineIntervals
+     */
+    public static boolean updateOnlineIntervals(byte[] onlineIntervals) {
         LocalDateTime now = LocalDateTime.now();
         long intervalIndex = ChronoUnit.HOURS.between(START_DATE.atStartOfDay(), now) / 4; // 计算当前是第几个4小时段
-
-//        if (intervalIndex < 0 || intervalIndex >= TOTAL_INTERVALS) {
-//            throw new IllegalArgumentException("时间超出范围");
-//        }
 
         int byteIndex = (int) (intervalIndex / 8); // 计算在哪个字节
         int bitIndex = (int) (intervalIndex % 8);  // 计算字节内的位索引
 
-        onlineIntervals[byteIndex] |= (1 << (7 - bitIndex)); // 设置对应位为1（从高位到低位）
+        byte mask = (byte) (1 << (7 - bitIndex)); // 计算要设置的位的掩码
+
+        boolean wasZero = (onlineIntervals[byteIndex] & mask) == 0; // 检查该位是否原来是0
+
+        onlineIntervals[byteIndex] |= mask; // 设置该位为1
+
+        return wasZero; // 如果原来是0（即被设置为1），返回true，否则返回false
     }
 
     public MyNodeInfoUtil queryNodeInfoByCreateTimeOrder(int lineNum, Connection conn) throws SQLException {
-        PreparedStatement psIn = conn.prepareStatement(singleDataQueryByCreateTimeOrder + (lineNum-1));
+        PreparedStatement psIn = conn.prepareStatement(singlePublicNodesQueryByCreateTimeOrder + (lineNum-1));
         ResultSet rsIn = psIn.executeQuery();
         if (rsIn.next()) {
             String dstIp = rsIn.getString("ipv4");
@@ -194,14 +260,26 @@ public class NodeCrawlerDb {
             return null;
         }
     }
+    public ArrayList<MyNodeInfoUtil> queryBatchNodeInfoByCreateTimeOrder(int startNum, Connection conn) throws SQLException {
+        PreparedStatement psIn = conn.prepareStatement(batchPublicNodesQueryByCreateTimeOrder + (startNum-1));
+        ResultSet rsIn = psIn.executeQuery();
+        ArrayList<MyNodeInfoUtil> list = new ArrayList<>();
+        while(rsIn.next()){
+            list.add(MyNodeInfoUtil.getInstanceFromMysqlRes(rsIn));
+        }
+        //System.out.println("list: " + list);
+        psIn.close();
+        return list;
+    }
     public int nodeInfoBatchInsert(NeighborsMessage msg, Connection conn) throws SQLException {
+        log.info("processing neighbors msg received from {}",msg.getFrom().getHostV4());
         int count =0;
-        PreparedStatement stmt = conn.prepareStatement(insertForTable1);
+        PreparedStatement stmt = conn.prepareStatement(insertPublicNodesTable);
         for (Node node : msg.getNodes()) {
 
             String ipv4 = node.getInetSocketAddressV4().getHostString();
             stmt.setString(1, ipv4);
-            byte[] nodeId = node.getId();
+            //byte[] nodeId = node.getId();
             if(node.getInetSocketAddressV6()==null){
                 stmt.setNull(2,Types.VARCHAR);
             }
@@ -211,13 +289,15 @@ public class NodeCrawlerDb {
             stmt.setInt(3,node.getPort());
             stmt.setInt(4,node.getPort());
             stmt.setBytes(5,node.getId());
-            MyNodeInfoUtil nodeInfo = queryByPriKey(conn,ipv4,nodeId);
+            MyNodeInfoUtil nodeInfo = queryByPriKey(conn,ipv4,node.getPort());
+            //已有的记录，只需更新NodeId
             if (nodeInfo != null) {
                 setRpcInfo(nodeInfo, stmt);
                 stmt.setBytes(20,nodeInfo.getOnline_days());
                 stmt.setInt(21,nodeInfo.getOnline_time());
-
+                stmt.setTimestamp(22,new Timestamp(nodeInfo.getLastOnlineDetect()));
             }
+            //初始化第一条记录
             else {
                 stmt.setNull(6,java.sql.Types.VARCHAR);
                 stmt.setNull(7,java.sql.Types.INTEGER);
@@ -236,6 +316,7 @@ public class NodeCrawlerDb {
                 byte[] online_days = new byte[255];
                 stmt.setBytes(20,online_days);
                 stmt.setInt(21,0);
+                stmt.setTimestamp(22,new Timestamp(1_000));
             }
 
             stmt.addBatch();
@@ -245,38 +326,49 @@ public class NodeCrawlerDb {
         stmt.close();
         return count;
     }
-    public MyNodeInfoUtil queryByPriKey(Connection conn, String ipv4,byte[] nodeId) throws SQLException {
+    public MyNodeInfoUtil queryByPriKey(Connection conn, String ipv4,int udpPort) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(queryByPriKey);
-        stmt.setString(1,ipv4);
-        stmt.setBytes(2,nodeId);
+        stmt.setString(1, ipv4);
+        stmt.setInt(2, udpPort);
+        stmt.setInt(3, udpPort);
         ResultSet rs = stmt.executeQuery();
-        if (rs.next()) {
-            NodeId nodeIdWrap = new NodeId(Tool.toByteArray(nodeId));
-            MyNodeInfoUtil node = new MyNodeInfoUtil(ipv4,rs.getInt("udpPort"),nodeIdWrap);
-            node.setIpv6(rs.getString("ipv6"));
-            node.setTcpPort(rs.getInt("tcpPort"));
-            node.setUdpPort(rs.getInt("udpPort"));
-            node.setWalletName(rs.getString("walletName"));
-            node.setActiveConnNum(rs.getInt("activeConnNum"));
-            node.setPassiveConnNum(rs.getInt("passiveConnNum"));
-            node.setCodeVersion(rs.getString("codeVersion"));
-            node.setConfigActiveNodeSize(rs.getInt("configActiveNodeSize"));
-            node.setConfigPassiveNodeSize(rs.getInt("configPassiveNodeSize"));
-            node.setConfigMaxConnections(rs.getInt("configMaxConnections"));
-            node.setSameIpMaxConnections(rs.getInt("sameIpMaxConnections"));
-            node.setSeedNodesSize(rs.getInt("seedNodesSize"));
-            node.setSupportConstant(rs.getBoolean("supportConstant"));
-            node.setVersionNum(rs.getString("versionNum"));
-            node.setJavaVersion(rs.getString("javaVersion"));
-            node.setCpuCount(rs.getInt("cpuCount"));
-            node.setOsName(rs.getString("osName"));
-            node.setOnline_days(rs.getBytes("online_days"));
-            node.setOnline_time(rs.getInt("online_time"));
 
-            return node;
-        }
-        else{
-            return null;
+        try {
+            if (rs.next()) {
+                return MyNodeInfoUtil.getInstanceFromMysqlRes(rs);
+            } else {
+                return null;
+            }
+        } finally {
+            // 确保先关闭 ResultSet，再关闭 PreparedStatement
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
         }
     }
+
+    /**
+     * 更新public nodes的在线探测时间lastOnlineDetect
+     * @param conn
+     * @param ipv4
+     * @param tcpPort
+     * @param udpPort
+     */
+    public void updateDetectTimeOnly(Connection conn, String ipv4, int tcpPort, int udpPort) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement(updateLastOnlineDetectInPublicNodes);
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        stmt.setTimestamp(1,now);
+        stmt.setString(2,ipv4);
+        stmt.setInt(3,tcpPort);
+        stmt.setInt(4,udpPort);
+        int updateCount = stmt.executeUpdate();
+        if (updateCount != 1) {
+            log.error("unexpected affect rows: {}, while updating ipv4: {}, tcpPort: {}, udpPort: {}", updateCount, ipv4, tcpPort, udpPort);
+        }
+        stmt.close();
+    }
+
 }

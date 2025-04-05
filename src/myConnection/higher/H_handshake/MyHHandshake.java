@@ -65,10 +65,10 @@ public class MyHHandshake {
 //            return;
 //        }
 //
-//        if (msg.getVersion() != Args.getInstance().getNodeP2pVersion()) {
+//        if (msg.getVersion() != Args.getInstanceFromMysqlRes().getNodeP2pVersion()) {
 //            logger.info("Peer {} different p2p version, peer->{}, me->{}",
 //                    peer.getInetSocketAddress(), msg.getVersion(),
-//                    Args.getInstance().getNodeP2pVersion());
+//                    Args.getInstanceFromMysqlRes().getNodeP2pVersion());
 //            peer.disconnect(ReasonCode.INCOMPATIBLE_VERSION);
 //            return;
 //        }

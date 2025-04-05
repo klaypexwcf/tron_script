@@ -16,7 +16,7 @@ public class GetOnlineNodesInfoTest {
     public static void main(String[] args) throws SQLException, IOException {
         NodeCrawlerDb db = new NodeCrawlerDb();
         Connection conn = db.getConnection();
-        String sql = "select * from online_nodes";
+        String sql = "select * from public_online_nodes";
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs =  ps.executeQuery();
         BufferedWriter writer = new BufferedWriter(new FileWriter("online nodes.csv"));

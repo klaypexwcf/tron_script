@@ -1,4 +1,4 @@
-package myConnection;
+package myConnection.NodeDetect;
 
 import org.tron.p2p.connection.Channel;
 import org.tron.p2p.connection.message.Message;

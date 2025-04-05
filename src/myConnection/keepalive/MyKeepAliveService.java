@@ -63,6 +63,7 @@ public class MyKeepAliveService implements MessageProcess {
                             System.out.println("sent pong to channel "+p.getLocalPort());
                         });
             } catch (Exception t) {
+                t.printStackTrace();
                 //log.error("Exception in keep alive task", t);
             }
         }, 500, 1000, TimeUnit.MILLISECONDS);
@@ -80,6 +81,7 @@ public class MyKeepAliveService implements MessageProcess {
                 try {
                     TimeUnit.SECONDS.sleep(5);
                 } catch (InterruptedException e) {
+                    System.out.println("got interrupted exception");;
                     throw new RuntimeException(e);
                 }
                 channel.send(new MyPongMessage());

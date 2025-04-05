@@ -1,13 +1,13 @@
 package myConnection.message;
 
 import myDiscover.MyConfig;
+import myDiscover.Tool;
 import org.tron.p2p.connection.business.handshake.DisconnectCode;
 import org.tron.p2p.connection.message.MessageType;
 import org.tron.p2p.discover.Node;
 import org.tron.p2p.protos.Connect;
 import org.tron.p2p.protos.Discover;
 import org.tron.p2p.utils.NetUtil;
-import myDiscover.Tool;
 
 public class MyHelloMessage extends MyMessage {
     private Connect.HelloMessage helloMessage;

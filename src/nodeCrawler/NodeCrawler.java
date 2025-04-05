@@ -29,38 +29,56 @@ public class NodeCrawler {
     public final NodeCrawlerDb nodeCrawlerDb = new NodeCrawlerDb();
 
     public NodeId nodeId;
-    public Node myNode;
+    public Node myNodeForUDP;
     public Node myPublicNode;
-    public int fromPort=18888;
+    public int fromPortForUDP =18888;
     //本地IP
     public static String localIp="10.2.8.6";
-    public static String publicLocalIp="58.87.95.60";
+    public static String publicLocalIp= "58.87.95.60";
+    //是否启动节点爬取
+    public static boolean findNewNodes=true;
+    //是否启动节点存活性探测
+    public static boolean detectOnline=false;
+
+
 
 
     private static final int MAX_IDLE_TIMES =10;
     private int idleTimes= 0;
     {
-        byte[] localId ={-50, -117, 20, 19, -71, 85, -16, 57, 5, -59, -22, -79, -103, -118, -12, 54, 92, -77, 13, 71, 35, 75, 41, -91, -101, -38, -76, -47, -106, 116, -1, 7, -43, 23, -63, 27, 122, 107, -67, 127, -44, 67, 79, 43, 55, 117, -46, 18, 118, 5, 17, 39, -90, 52, 50, 12, 62, 11, 47, 29, -67, -75, 68, -14};
+        byte[] localId =Tool.generateRandomNodeId();
         nodeId = new NodeId(Tool.toByteArray(localId));
-        myNode= new Node(Tool.toPrimitive(nodeId.getNodeId()), localIp,"",fromPort);
-        myPublicNode = new Node(Tool.toPrimitive(nodeId.getNodeId()), publicLocalIp,"",fromPort);
+        myNodeForUDP = new Node(Tool.toPrimitive(nodeId.getNodeId()), localIp,"", fromPortForUDP);
+        myPublicNode = new Node(Tool.toPrimitive(nodeId.getNodeId()), publicLocalIp,"", fromPortForUDP);
     }
 
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() {
         return nodeCrawlerDb.getConnection();
     }
 
-    public static void main(String[] args) throws SQLException, InterruptedException {
+    public static void main(String[] args)  {
         System.setProperty("logback.configurationFile","src/nodeCrawler/resources/logback.xml");
         NodeCrawler nc = new NodeCrawler();
-        MyMessageHandlerForNodeCrawler myMessageHandler = nc.neighborsListeningWork();
-        nc.startSendWork(myMessageHandler);
-        System.out.println("crawler instance working");
-        NodeOnlineUpdater nodeOnlineUpdater = new NodeOnlineUpdater(localIp);
-        nodeOnlineUpdater.startOnlineUpdater();
-        System.out.println("node online updater working");
-        while(true){
-            Thread.sleep(1000);
+        if (findNewNodes) {
+            try {
+                MyMessageHandlerForNodeCrawler myMessageHandler = nc.neighborsListeningWork();
+                nc.startSendWork(myMessageHandler);
+                System.out.println("crawler instance working");
+            } catch (SQLException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (detectOnline) {
+            NodeOnlineUpdater nodeOnlineUpdater = new NodeOnlineUpdater(localIp);
+            nodeOnlineUpdater.startOnlineUpdater();
+            System.out.println("node online updater working");
+        }
+        try {
+            while(true){
+                Thread.sleep(1_000*60);
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -72,35 +90,42 @@ public class NodeCrawler {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(() -> {
             // 在单独的线程中执行该方法
-            Connection conn = nodeCrawlerDb.getConnection();
-            updateDbSize(conn);
-            MyNodeInfoUtil myNodeInfo;
-            while(true){
-                if (nodeCrawlerDb.dbCurrentCursorLineNum > nodeCrawlerDb.dbOldCursorLineNUm) {
-                    idleTimes=0;
-                    for(int i = nodeCrawlerDb.dbOldCursorLineNUm +1; i<= nodeCrawlerDb.dbCurrentCursorLineNum; i++) {
-                        myNodeInfo = queryNodeInfoByCreateTimeOrder(i, conn);
-                        if(myNodeInfo==null) {
-                            throw new SQLException("get line info failed");
-                        }
-                        else if (myNodeInfo.ipv4==null||myNodeInfo.nodeId==null) {
-                            System.out.println("line "+i+" has insufficient data");
-                            //跳过这一条数据，转到下一条数据
-                            continue;
-                        }
-                        sendFindNodeWithRandomDstId(myNodeInfo.ipv4, myNodeInfo.udpPort,myMessageHandler);
-                    }
-                }
-                else{
-                    idleTimes++;
-                    System.out.println("no new row in table, wait for 5s");
-                    Thread.sleep(5_000);
-                }
-                if (idleTimes >= MAX_IDLE_TIMES) {
-                    //如果长期闲置，那么从头开始再发送一次find_node
-                    nodeCrawlerDb.resetCursorLineNum();
-                }
+
+            try(Connection conn = nodeCrawlerDb.getConnection()) {
                 updateDbSize(conn);
+                MyNodeInfoUtil myNodeInfo;
+                while(true){
+                    if (nodeCrawlerDb.dbCurrentCursorLineNum > nodeCrawlerDb.dbOldCursorLineNUm) {
+                        idleTimes=0;
+                        for(int i = nodeCrawlerDb.dbOldCursorLineNUm +1; i<= nodeCrawlerDb.dbCurrentCursorLineNum; i++) {
+                            myNodeInfo = queryNodeInfoByCreateTimeOrder(i, conn);
+                            if(myNodeInfo==null) {
+                                throw new SQLException("get line info failed");
+                            }
+                            else if (myNodeInfo.ipv4==null||myNodeInfo.nodeId==null) {
+                                System.out.println("line "+i+" has insufficient data");
+                                log.error("line {} has insufficient data", i);
+                                //跳过这一条数据，转到下一条数据
+                                continue;
+                            }
+                            sendFindNodeWithRandomDstId(myNodeInfo.ipv4, myNodeInfo.udpPort,myMessageHandler);
+                        }
+                    }
+                    else{
+                        idleTimes++;
+                        System.out.println("no new row in table, wait for 5s");
+                        Thread.sleep(5_000);
+                    }
+                    if (idleTimes >= MAX_IDLE_TIMES) {
+                        //如果长期闲置，那么从头开始再发送一次find_node
+                        nodeCrawlerDb.resetCursorLineNum();
+                    }
+                    updateDbSize(conn);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         });
         executorService.shutdown();
@@ -116,7 +141,7 @@ public class NodeCrawler {
     public void sendFindNode(String dstIp,int dstPort, NodeId dstNodeId,MyMessageHandlerForNodeCrawler myMessageHandler)  {
         dstNodeId.changeIdByOneBit();
         //注意，这里nodeId发生了一位的变化！
-        MyFindNodeMessage myFindNodeMessage =new MyFindNodeMessage(myNode,dstNodeId.getLowerBytesId());
+        MyFindNodeMessage myFindNodeMessage =new MyFindNodeMessage(myNodeForUDP,dstNodeId.getLowerBytesId());
         MyUdpEvent myUdpEvent = new MyUdpEvent(myFindNodeMessage,new InetSocketAddress(dstIp,dstPort));
         myMessageHandler.accept(myUdpEvent);
         System.out.println("sent findNode to "+dstIp+":"+dstPort);
@@ -134,9 +159,9 @@ public class NodeCrawler {
         NodeId nodeId = new NodeId(byteId);
         MyEventHandlerForNodeCrawler myEventHandler=new MyEventHandlerForNodeCrawler(null);
         NioEventLoopGroup group = new NioEventLoopGroup();
-        Bootstrap bootstrap = getBootstrapForNodeCrawler(group, myEventHandler,nodeId,fromPort);
+        Bootstrap bootstrap = getBootstrapForNodeCrawler(group, myEventHandler,nodeId, fromPortForUDP);
         //在局域网运行时，需要改这里的IP
-        Channel channel =bootstrap.bind( new InetSocketAddress(localIp,fromPort)).sync().channel();
+        Channel channel =bootstrap.bind( new InetSocketAddress(localIp, fromPortForUDP)).sync().channel();
         addShutdownHook(channel,group);
         //channel.closeFuture().sync();
         return (MyMessageHandlerForNodeCrawler) channel.pipeline().last();

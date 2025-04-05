@@ -11,7 +11,7 @@ import myConnection.MyChannel;
 
 @Slf4j(topic = "nodeOnlineUpdater")
 public class MyP2pChannelInitializerForNodeTestConnection  extends ChannelInitializer<NioSocketChannel> {
-    public static final AttributeKey<Boolean> IS_SUCCESS = AttributeKey.valueOf("IsSuccess");
+    public static final AttributeKey<byte[]> NEW_NODE_ID = AttributeKey.valueOf("newNodeId");
     private final String remoteId;
     private final int localPort;
     private final String localNodeId;
@@ -29,21 +29,16 @@ public class MyP2pChannelInitializerForNodeTestConnection  extends ChannelInitia
     protected void initChannel(NioSocketChannel ch) throws Exception {
         final MyChannel channel = new MyChannel();
         channel.initForTestConnection(ch.pipeline(), remoteId, false,localPort,localNodeId,remoteIp);
+        //System.out.println("channel initialized");
         ch.config().setRecvByteBufAllocator(new FixedRecvByteBufAllocator(256 * 1024));
         ch.config().setOption(ChannelOption.SO_RCVBUF, 256 * 1024);
         ch.config().setOption(ChannelOption.SO_BACKLOG, 1024);
         ch.attr(DISCONNECT_REASON_KEY).set(disconnectReason);
-        ch.attr(IS_SUCCESS).set(false);
+        ch.attr(NEW_NODE_ID).set(null);
         ch.closeFuture().addListener((ChannelFutureListener) future -> {
             channel.setDisconnect(true);
             disconnectReason= channel.getDisconnectReason();
             ch.attr(DISCONNECT_REASON_KEY).set(disconnectReason);
-            if (channel.isDiscoveryMode()) {
-                //MyChannelManager.getNodeDetectService().notifyDisconnect(channel);
-            } else {
-                log.info("close channel {}",channel.getRemoteIp());
-            }
         });
-        //System.out.println("channel initialized for "+remoteIp);
     }
 }

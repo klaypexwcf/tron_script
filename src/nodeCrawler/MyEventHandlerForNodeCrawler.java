@@ -45,6 +45,7 @@ public class MyEventHandlerForNodeCrawler {
                 int num = processNeighborsMsg(msg,conn);
                 System.out.println("update "+num+" nodes info");
             } catch (SQLException e) {
+                e.printStackTrace();
                 throw new RuntimeException(e);
             }
         }

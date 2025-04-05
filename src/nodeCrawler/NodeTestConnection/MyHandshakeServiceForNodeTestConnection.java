@@ -9,7 +9,7 @@ import myConnection.message.MyMessage;
 import org.tron.p2p.connection.business.handshake.DisconnectCode;
 import org.tron.p2p.protos.Connect;
 
-import static nodeCrawler.NodeTestConnection.MyP2pChannelInitializerForNodeTestConnection.IS_SUCCESS;
+import static nodeCrawler.NodeTestConnection.MyP2pChannelInitializerForNodeTestConnection.NEW_NODE_ID;
 import static org.tron.p2p.connection.ChannelManager.getDisconnectReason;
 
 @Slf4j
@@ -20,6 +20,7 @@ public class MyHandshakeServiceForNodeTestConnection extends MyHandshakeService 
     @Override
     protected void sendHelloMsg(MyChannel channel, DisconnectCode code, long time, int localPort, String localNodeId){
         MyHelloMessage helloMessage = new MyHelloMessage(code, time,localNodeId,localPort,localIp);
+        //System.out.println(NetUtil.validNode(helloMessage.getFrom()));
         channel.send(helloMessage);
     }
 
@@ -40,9 +41,9 @@ public class MyHandshakeServiceForNodeTestConnection extends MyHandshakeService 
         }
         channel.setHelloMessage(msg);
         DisconnectCode code = DisconnectCode.TOO_MANY_PEERS;
+        byte [] nodeId = msg.getFrom().getId();
         //收到hello就算成功
-        channel.getCtx().channel().attr(IS_SUCCESS).set(true);
-
+        channel.getCtx().channel().attr(NEW_NODE_ID).set(nodeId);
         channel.close(getDisconnectReason(code).toString());
         return;
     }
