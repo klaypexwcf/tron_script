@@ -45,7 +45,7 @@ public class NodeOnlineUpdater {
                 e.printStackTrace();
                 throw new RuntimeException(e);
             }
-        },0,3, TimeUnit.HOURS);
+        },0,2, TimeUnit.HOURS);
         log.info("online updater started, now {}",System.currentTimeMillis());
         System.out.println("online updater started, now "+System.currentTimeMillis());
         Runtime.getRuntime().addShutdownHook(new Thread(()->{

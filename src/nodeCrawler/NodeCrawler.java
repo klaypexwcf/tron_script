@@ -32,13 +32,18 @@ public class NodeCrawler {
     public Node myNodeForUDP;
     public Node myPublicNode;
     public int fromPortForUDP =18888;
-    //本地IP
-    public static String localIp="10.2.8.6";
-    public static String publicLocalIp= "58.87.95.60";
+    /**
+     * 使用ifconfig时显示的IP地址
+     */
+    public static String localIp="187.124.231.27";
+    /**
+     * 机器的公网IP
+     */
+    public static String publicLocalIp= "187.124.231.27";
     //是否启动节点爬取
     public static boolean findNewNodes=true;
     //是否启动节点存活性探测
-    public static boolean detectOnline=false;
+    public static boolean detectOnline=true;
 
 
 

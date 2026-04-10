@@ -45,6 +45,5 @@ public class MyHandshakeServiceForNodeTestConnection extends MyHandshakeService 
         //收到hello就算成功
         channel.getCtx().channel().attr(NEW_NODE_ID).set(nodeId);
         channel.close(getDisconnectReason(code).toString());
-        return;
     }
 }

@@ -17,16 +17,21 @@ import java.util.Arrays;
 
 @Slf4j
 public class NodeCrawlerDb {
-    private static final LocalDate START_DATE = LocalDate.of(2025, 1, 1);
-    //private static final int TOTAL_YEARS = 100; // 你可以根据存储大小调整
+    private static final LocalDate START_DATE = LocalDate.of(2026, 1, 1);
+
+
+    //在这里设置数据库信息
     public static final int LENGTH_OF_MYSQL_BLOB = 16384;
     public String database = "tron";
-    public String url = "jdbc:mysql://81.70.23.5:3306/"+database+"?connectTimeout=5000";
-    public String user = "tron";
+    public String url = "jdbc:mysql://localhost:3306/"+database+"?connectTimeout=5000";
+    public String user = "root";
     public String password = "Wcf314159";
     public String publicNodesTableName = "public_nodes_test";
     public String publicOnlineNodesTableName = "public_online_nodes_test";
     public String tronscanNodesTableName = "tronscan_nodes";
+    //在这里设置数据库信息
+
+
     public int queryTronscanNodesBatchSize = 40;
     public int dbOldCursorLineNUm = 0;
     public int dbCurrentCursorLineNum = 0;

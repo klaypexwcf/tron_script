@@ -1,0 +1,35 @@
+<component name="ArtifactManager">
+  <artifact name="neighborsTest">
+    <output-path>$PROJECT_DIR$/out/artifacts/neighborsTest</output-path>
+    <root id="root">
+      <element id="archive" name="tron_eclipse.jar">
+        <element id="module-output" name="tron_eclipse" />
+      </element>
+      <element id="library" level="project" name="bcprov-jdk15on-1.69" />
+      <element id="library" level="project" name="common-1.0.0" />
+      <element id="library" level="project" name="netty-handler-4.1.79.Final1" />
+      <element id="library" level="project" name="logback-classic-1.2.9" />
+      <element id="library" level="project" name="mysql.connector.java" />
+      <element id="library" level="project" name="protocol-1.0.0" />
+      <element id="library" level="project" name="protobuf-java-3.21.121" />
+      <element id="library" level="project" name="protocol-core-2.18.41" />
+      <element id="library" level="project" name="chainbase-1.0.0" />
+      <element id="library" level="project" name="netty-buffer-4.1.79.Final" />
+      <element id="library" level="project" name="google.code.gson" />
+      <element id="library" level="project" name="logback-core-1.2.9" />
+      <element id="library" level="project" name="spring-core-5.3.18" />
+      <element id="library" level="project" name="netty-resolver-4.1.79.Final" />
+      <element id="library" level="project" name="json-20231013" />
+      <element id="library" level="project" name="slf4j-api-1.7.36" />
+      <element id="file-copy" path="F:/download/jar包/libp2p-2.2.1.jar" />
+      <element id="library" level="project" name="netty-transport-4.1.79.Final" />
+      <element id="library" level="project" name="netty-codec-4.1.79.Final" />
+      <element id="library" level="project" name="commons-lang3-3.16.0" />
+      <element id="library" level="project" name="lombok-1.18.24" />
+      <element id="library" level="project" name="snappy-java-1.1.10.5" />
+      <element id="library" level="project" name="common-1.0.0-sources" />
+      <element id="library" level="project" name="guava-31.1-android" />
+      <element id="library" level="project" name="netty-common-4.1.79.Final" />
+    </root>
+  </artifact>
+</component>
